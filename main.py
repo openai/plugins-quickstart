@@ -19,7 +19,7 @@ async def add_todo(username):
 
 @app.get("/todos/<string:username>")
 async def get_todos(username):
-    return quart.Response(response=json.dumps(_TODOS.get(username, [])), status=200)
+    return return quart.jsonify(_TODOS.get(username, []))
 
 @app.delete("/todos/<string:username>")
 async def delete_todo(username):
