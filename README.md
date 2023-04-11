@@ -2,18 +2,33 @@
 
 Get a Todo list ChatGPT plugin up and running in under 5 minutes using Python. If you do not already have plugin developer access, please [join the waitlist](https://openai.com/waitlist/plugins).
 
-## Setup
 
-To install the required packages for this plugin, run the following command:
+## Python Setup
 
-```bash
+To install the required packages for the Python version of this plugin, run the following command:
+
+```bach
 pip install -r requirements.txt
 ```
 
-To run the plugin, enter the following command:
+To run the Python plugin, enter the following command:
 
 ```bash
 python main.py
+```
+
+## JavaScript Setup
+
+To install the required packages for the JavaScript version of this plugin, run the following command:
+
+```bash
+npm install
+```
+
+To run the JavaScript plugin, enter the following command:
+
+```bash
+node main.js
 ```
 
 Once the local server is running:
