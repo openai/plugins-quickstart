@@ -63,12 +63,6 @@ app.get('/openapi.yaml', (req, res) => {
   });
 });
 
-const main = () => {
-  app.listen(5003, '0.0.0.0', () => {
-    console.log('App is running on port 5003');
-  });
-};
-
-if (require.main === module) {
-  main();
-}
+app.listen(5003, '0.0.0.0', () => {
+  console.log('App is running on port 5003');
+});
