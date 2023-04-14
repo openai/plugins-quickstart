@@ -28,7 +28,7 @@ The plugin should now be installed and enabled! You can start with a question li
 
 ## Deploy
 
-Fork the Todo list ChatGPT plugin app on Replit [here](https://replit.com/@bardia/ChatGPT-Todo-Plugin).
+[![Run on Replit](https://replit.com/badge?caption=Run%20on%20Replit)](https://replit.com/@bardia/ChatGPT-Todo-Plugin)
 
 ## Getting help
 
