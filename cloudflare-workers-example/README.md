@@ -16,9 +16,12 @@ The sample plugin allows ChatGPT users to search for repositories using GitHub's
 
 ## Usage
 
-1. You can configure the `.well-known/ai-plugin.json` route in `ai-plugin.ts`.
+
+## Usage
+
+1. You can configure the `.well-known/ai-plugin.json` route in `index.ts`.
 2. Update the OpenAPI schema in `openapi.ts`.
-3. For any new routes or additional code, update `index.ts`.
+3. You can set up any new routes and the associated OpenAPI schema by defining new routes. See `search.ts` for an example.
 
 ## Deploying to OpenAI's API
 
