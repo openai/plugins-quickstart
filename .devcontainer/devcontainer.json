@@ -1,6 +1,6 @@
 // For format details, see https://aka.ms/devcontainer.json.
 {
-	"name": "Python 3",
+	"name": "ChatGPT Quickstart Plugins",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/universal:2",
 	// Features to add to the dev container. More info: https://containers.dev/features.
