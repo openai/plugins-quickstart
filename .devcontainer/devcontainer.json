@@ -12,7 +12,7 @@
 	],
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "pip install -r requirements.txt",
-	"postAttachCommand": "python main.py",
+	"postAttachCommand": "${containerWorkspaceFolder}/.devcontainer/addcodespacename.sh; python main.py",
 	"customizations": {
 		"codespaces": {
 			"openFiles": [
