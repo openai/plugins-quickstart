@@ -39,9 +39,10 @@ _A codespace is a development environment that's hosted in the cloud. You can bu
 3. Once everything is installed, you should see that a forwarded port is now running the plugin. **Set the port visibility to public.** 
 <img width="1412" alt="Choosing public port visibility for forwarded port" src="https://user-images.githubusercontent.com/22990146/235510002-1a9ef89b-e12c-4145-8119-45daed452028.png">
 
-4. Copy the forwarded port's local address. It should follow this naming convention 
+4. Copy the forwarded port's local address. ( **Tip:** use the clipboard icon to copy and paste the local address!)
+<img width="1215" alt="Highlighting clip board icon which shows tooltip thats says Copy local address" src="https://user-images.githubusercontent.com/22990146/235545580-72fd4661-7288-42cb-b213-2da1a5a7baea.png">
 
-`https://<GITHUB_USER_HANDLE>-<RANDOMLY_GENERATED_PHRASE>-<RANDOMLY_GENERATED_ALPHANUMERIC_STRING>-5003.preview.app.github.dev`
+
 
 5. Navigate to https://chat.openai.com. 
 
