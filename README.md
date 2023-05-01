@@ -28,7 +28,7 @@ Once the local server is running:
 
 The plugin should now be installed and enabled! You can start with a question like "What is on my todo list" and then try adding something to it as well! 
 
-## GitHub CodeSpaces Setup
+## GitHub Codespaces Setup
 _A codespace is a development environment that's hosted in the cloud. You can build and run this plugin via a GitHub Codespace by following the directions below:_ 
 
 1. Open this environment in a GitHub Codespace by choosing "Use this template" > "Open in Codespace" as pictured below.
