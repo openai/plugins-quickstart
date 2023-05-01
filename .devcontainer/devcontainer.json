@@ -10,12 +10,9 @@
 	"forwardPorts": [
 		5003
 	],
-	"runArgs": [
-		"-c", "chmod +x ${containerWorkspaceFolder}/.devcontainer/addcodespacename.sh"
-	],
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "pip install -r requirements.txt",
-	"postAttachCommand": "${containerWorkspaceFolder}/.devcontainer/addcodespacename.sh; python main.py",
+	"postAttachCommand": "chmod +x ${containerWorkspaceFolder}/.devcontainer/addcodespacename.sh; ${containerWorkspaceFolder}/.devcontainer/addcodespacename.sh; python main.py",
 	"customizations": {
 		"codespaces": {
 			"openFiles": [
