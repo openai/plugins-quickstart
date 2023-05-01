@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 # Determine the value of SITE_HOST based on whether the project is opened in a Codespace
-if [ -z ${CODESPACE_NAME+x} ]; then
+if [ -z "${CODESPACE_NAME+x}" ]; then
 	SITE_HOST="http://localhost:5003"
 else
 	SITE_HOST="https://${CODESPACE_NAME}-5003.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
