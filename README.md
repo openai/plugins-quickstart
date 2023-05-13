@@ -1,8 +1,19 @@
 # ChatGPT plugins quickstart
 
-Get a todo list ChatGPT plugin up and running in under 5 minutes using Python. If you do not already have plugin developer access, please [join the waitlist](https://openai.com/waitlist/plugins).
+Get a todo list ChatGPT plugin up and running in under 5 minutes using Python. This plugin is designed to work in conjunction with the [ChatGPT Plugins Documentation](https://platform.openai.com/docs/plugins). If you do not already have plugin developer access, please [join the waitlist](https://openai.com/waitlist/plugins).
 
 ## Setup
+
+Before you can run the plugin, you need to get the code onto your computer. This is done by cloning the GitHub repository. If you have git installed, you can do this by running the following command in your terminal:
+
+```git clone https://github.com/openai/plugins-quickstart
+```
+
+This will create a copy of the repository on your local machine.
+Once you have cloned the repository, navigate into the directory:
+
+```cd plugins-quickstart
+```
 
 To install the required packages for this plugin, run the following command:
 
