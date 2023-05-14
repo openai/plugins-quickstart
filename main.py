@@ -4,10 +4,12 @@ import quart
 import quart_cors
 from quart import request
 
-app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
+app = quart_cors.cors(quart.Quart(__name__),
+                      allow_origin="https://chat.openai.com")
 
 # Keep track of todo's. Does not persist if Python session is restarted.
 _TODOS = {}
+
 
 @app.post("/todos/<string:username>")
 async def add_todo(username):
@@ -17,9 +19,11 @@ async def add_todo(username):
     _TODOS[username].append(request["todo"])
     return quart.Response(response='OK', status=200)
 
+
 @app.get("/todos/<string:username>")
 async def get_todos(username):
     return quart.Response(response=json.dumps(_TODOS.get(username, [])), status=200)
+
 
 @app.delete("/todos/<string:username>")
 async def delete_todo(username):
@@ -30,10 +34,12 @@ async def delete_todo(username):
         _TODOS[username].pop(todo_idx)
     return quart.Response(response='OK', status=200)
 
+
 @app.get("/logo.png")
 async def plugin_logo():
     filename = 'logo.png'
     return await quart.send_file(filename, mimetype='image/png')
+
 
 @app.get("/.well-known/ai-plugin.json")
 async def plugin_manifest():
@@ -42,6 +48,7 @@ async def plugin_manifest():
         text = f.read()
         return quart.Response(text, mimetype="text/json")
 
+
 @app.get("/openapi.yaml")
 async def openapi_spec():
     host = request.headers['Host']
@@ -49,8 +56,10 @@ async def openapi_spec():
         text = f.read()
         return quart.Response(text, mimetype="text/yaml")
 
+
 def main():
     app.run(debug=True, host="0.0.0.0", port=5003)
+
 
 if __name__ == "__main__":
     main()
