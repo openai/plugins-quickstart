@@ -11,7 +11,7 @@ TODO_FILE = "todos.yaml"
 
 # Load the todos from the file
 try:
-    with open(TODO_FILE, "r") as f:
+    with open(TODO_FILE, "r" , encoding="utf-8") as f:
         _TODOS = yaml.safe_load(f)
 except FileNotFoundError:
     _TODOS = {}
@@ -22,8 +22,8 @@ async def add_todo(username):
     if username not in _TODOS:
         _TODOS[username] = []
     _TODOS[username].append(request_data["todo"])
-    with open(TODO_FILE, "w") as f:
-        yaml.safe_dump(_TODOS, f)
+    with open(TODO_FILE, "w" , encoding="utf-8") as f:
+        yaml.safe_dump(_TODOS, f, allow_unicode=True)
     print(f"Received POST request: {request_data}")
     return quart.Response(response='OK', status=200)
 
@@ -37,7 +37,7 @@ async def delete_todo(username):
     todo_idx = request_data["todo_idx"]
     if 0 <= todo_idx < len(_TODOS[username]):
         _TODOS[username].pop(todo_idx)
-        with open(TODO_FILE, "w") as f:
+        with open(TODO_FILE, "w" , encoding="utf-8") as f:
             yaml.safe_dump(_TODOS, f)
     return quart.Response(response='OK', status=200)
 
