@@ -1,20 +1,30 @@
 import json
-
+import yaml
 import quart
 import quart_cors
 from quart import request
 
 app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
 
-# Keep track of todo's. Does not persist if Python session is restarted.
-_TODOS = {}
+# The file to store the todos
+TODO_FILE = "todos.yaml"
+
+# Load the todos from the file
+try:
+    with open(TODO_FILE, "r") as f:
+        _TODOS = yaml.safe_load(f)
+except FileNotFoundError:
+    _TODOS = {}
 
 @app.post("/todos/<string:username>")
 async def add_todo(username):
-    request = await quart.request.get_json(force=True)
+    request_data = await request.get_json(force=True)
     if username not in _TODOS:
         _TODOS[username] = []
-    _TODOS[username].append(request["todo"])
+    _TODOS[username].append(request_data["todo"])
+    with open(TODO_FILE, "w") as f:
+        yaml.safe_dump(_TODOS, f)
+    print(f"Received POST request: {request_data}")
     return quart.Response(response='OK', status=200)
 
 @app.get("/todos/<string:username>")
@@ -23,11 +33,12 @@ async def get_todos(username):
 
 @app.delete("/todos/<string:username>")
 async def delete_todo(username):
-    request = await quart.request.get_json(force=True)
-    todo_idx = request["todo_idx"]
-    # fail silently, it's a simple plugin
+    request_data = await request.get_json(force=True)
+    todo_idx = request_data["todo_idx"]
     if 0 <= todo_idx < len(_TODOS[username]):
         _TODOS[username].pop(todo_idx)
+        with open(TODO_FILE, "w") as f:
+            yaml.safe_dump(_TODOS, f)
     return quart.Response(response='OK', status=200)
 
 @app.get("/logo.png")
