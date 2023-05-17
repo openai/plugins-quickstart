@@ -9,7 +9,7 @@ app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.c
 # Keep track of todo's. Does not persist if Python session is restarted.
 _TODOS = {}
 
-@app.post("/todos/<string:username>")
+@app.route("/todos/<string:username>", methods=["POST"])
 async def add_todo(username):
     request = await quart.request.get_json(force=True)
     if username not in _TODOS:
@@ -17,11 +17,11 @@ async def add_todo(username):
     _TODOS[username].append(request["todo"])
     return quart.Response(response='OK', status=200)
 
-@app.get("/todos/<string:username>")
+@app.route("/todos/<string:username>", methods=["GET"])
 async def get_todos(username):
     return quart.Response(response=json.dumps(_TODOS.get(username, [])), status=200)
 
-@app.delete("/todos/<string:username>")
+@app.route("/todos/<string:username>", methods=["DELETE"])
 async def delete_todo(username):
     request = await quart.request.get_json(force=True)
     todo_idx = request["todo_idx"]
@@ -30,24 +30,24 @@ async def delete_todo(username):
         _TODOS[username].pop(todo_idx)
     return quart.Response(response='OK', status=200)
 
-@app.get("/logo.png")
+@app.route("/logo.png", methods=["GET"])
 async def plugin_logo():
     filename = 'logo.png'
-    return await quart.send_file(filename, mimetype='image/png')
+    return await quart.send_file(filename)
 
-@app.get("/.well-known/ai-plugin.json")
+@app.route("/.well-known/ai-plugin.json", methods=["GET"])
 async def plugin_manifest():
     host = request.headers['Host']
     with open("./.well-known/ai-plugin.json") as f:
         text = f.read()
-        return quart.Response(text, mimetype="text/json")
+        return quart.Response(text, content_type="text/json")
 
-@app.get("/openapi.yaml")
+@app.route("/openapi.yaml", methods=["GET"])
 async def openapi_spec():
     host = request.headers['Host']
     with open("openapi.yaml") as f:
         text = f.read()
-        return quart.Response(text, mimetype="text/yaml")
+        return quart.Response(text, content_type="text/yaml")
 
 def main():
     app.run(debug=True, host="0.0.0.0", port=5003)
