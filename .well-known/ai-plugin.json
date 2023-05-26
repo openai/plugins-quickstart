@@ -1,8 +1,8 @@
 {
     "schema_version": "v1",
-    "name_for_human": "TODO Plugin (no auth)",
+    "name_for_human": "TODO List (no auth)",
     "name_for_model": "todo",
-    "description_for_human": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
+    "description_for_human": "Manage your TODO list. You can add, remove and view your TODOs.",
     "description_for_model": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
     "auth": {
       "type": "none"
