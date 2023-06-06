@@ -1,0 +1,7 @@
+
+{
+  "name": "ChatGPT Plugin QuickStart",
+  "description": "Get a ChatGPT plugin up and running in under 5 minutes!",
+  "repository": "https://github.com/openai/plugins-quickstart",
+  "keywords": ["openai", "plugin", "python"]
+}

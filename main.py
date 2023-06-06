@@ -1,9 +1,12 @@
 import json
 
+import os
 import quart
 import quart_cors
 from quart import request
 
+
+port = int(os.environ.get('PORT', 5003))
 app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
 
 # Keep track of todo's. Does not persist if Python session is restarted.
@@ -50,7 +53,7 @@ async def openapi_spec():
         return quart.Response(text, mimetype="text/yaml")
 
 def main():
-    app.run(debug=True, host="0.0.0.0", port=5003)
+    app.run(debug=True, host="0.0.0.0", port=port)
 
 if __name__ == "__main__":
     main()
