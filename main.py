@@ -1,39 +1,41 @@
 import json
+import os
 
+from urllib.parse import unquote
 import quart
-import quart_cors
 from quart import request
+from quart_cors import cors
 
-app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
+app = quart.Quart(__name__)
+app = cors(app, allow_origin="https://chat.openai.com")
 
-# Keep track of todo's. Does not persist if Python session is restarted.
-_TODOS = {}
 
-@app.post("/todos/<string:username>")
-async def add_todo(username):
-    request = await quart.request.get_json(force=True)
-    if username not in _TODOS:
-        _TODOS[username] = []
-    _TODOS[username].append(request["todo"])
+@app.get("/files/<path:filename>")
+async def get_file(filename):
+    filename = unquote(filename)  # URL-decode the filename
+    if os.path.exists(filename):
+        with open(filename, 'r') as f:
+            content = f.read()
+        return quart.Response(response=json.dumps({"content": content}), status=200)
+    else:
+        return quart.Response(response='File not found', status=404)
+
+
+@app.post("/files/<path:filename>")
+async def modify_file(filename):
+    request_data = await quart.request.get_json(force=True)
+    filename = unquote(filename)  # URL-decode the filename
+    content = request_data.get("content", "")
+    with open(filename, 'w') as f:
+        f.write(content)
     return quart.Response(response='OK', status=200)
 
-@app.get("/todos/<string:username>")
-async def get_todos(username):
-    return quart.Response(response=json.dumps(_TODOS.get(username, [])), status=200)
-
-@app.delete("/todos/<string:username>")
-async def delete_todo(username):
-    request = await quart.request.get_json(force=True)
-    todo_idx = request["todo_idx"]
-    # fail silently, it's a simple plugin
-    if 0 <= todo_idx < len(_TODOS[username]):
-        _TODOS[username].pop(todo_idx)
-    return quart.Response(response='OK', status=200)
 
 @app.get("/logo.png")
 async def plugin_logo():
     filename = 'logo.png'
     return await quart.send_file(filename, mimetype='image/png')
+
 
 @app.get("/.well-known/ai-plugin.json")
 async def plugin_manifest():
@@ -42,6 +44,7 @@ async def plugin_manifest():
         text = f.read()
         return quart.Response(text, mimetype="text/json")
 
+
 @app.get("/openapi.yaml")
 async def openapi_spec():
     host = request.headers['Host']
@@ -49,8 +52,27 @@ async def openapi_spec():
         text = f.read()
         return quart.Response(text, mimetype="text/yaml")
 
+
+@app.after_request
+async def after_request(response):
+    response.headers['Access-Control-Allow-Origin'] = 'https://chat.openai.com'
+    response.headers['Access-Control-Allow-Headers'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = '*'
+    return response
+
+
+@app.route("/files/<path:filename>", methods=['OPTIONS'])
+async def options_files(filename):
+    response = quart.Response(response='', status=200)
+    response.headers['Access-Control-Allow-Origin'] = "https://chat.openai.com"
+    response.headers['Access-Control-Allow-Headers'] = 'content-type,openai-conversation-id,openai-ephemeral-user-id'
+    response.headers['Access-Control-Allow-Methods'] = 'GET,POST'
+    return response
+
+
 def main():
     app.run(debug=True, host="0.0.0.0", port=5003)
+
 
 if __name__ == "__main__":
     main()

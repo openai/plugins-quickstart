@@ -1,9 +1,9 @@
 {
     "schema_version": "v1",
-    "name_for_human": "TODO List (no auth)",
-    "name_for_model": "todo",
-    "description_for_human": "Manage your TODO list. You can add, remove and view your TODOs.",
-    "description_for_model": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
+    "name_for_human": "File Debugging Plugin",
+    "name_for_model": "file_debugger",
+    "description_for_human": "Debug your code files. You can retrieve and modify files on your computer.",
+    "description_for_model": "Plugin for debugging code files, you can retrieve and modify files on your computer.",
     "auth": {
       "type": "none"
     },
@@ -14,5 +14,5 @@
     "logo_url": "http://localhost:5003/logo.png",
     "contact_email": "legal@example.com",
     "legal_info_url": "http://example.com/legal"
-  }
+}
   
