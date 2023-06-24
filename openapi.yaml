@@ -6,12 +6,12 @@ info:
 servers:
    -  url: http://localhost:5003
 paths:
-  /files/{filename}:
+  /files:
     get:
       operationId: getFile
       summary: Get the contents of a file
       parameters:
-      - in: path
+      - in: query
         name: filename
         schema:
             type: string
@@ -28,7 +28,7 @@ paths:
       operationId: modifyFile
       summary: Modify a file
       parameters:
-      - in: path
+      - in: query
         name: filename
         schema:
             type: string
@@ -43,6 +43,52 @@ paths:
       responses:
         "200":
           description: OK
+  /create_env:
+    post:
+      operationId: createEnv
+      summary: Create a new Conda environment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createEnvRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createEnvResponse'
+        "400":
+          description: Environment creation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createEnvErrorResponse'
+  /run_script:
+    post:
+      operationId: runScript
+      summary: Run a Python script in a Conda environment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/runScriptRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/runScriptResponse'
+        "400":
+          description: Script execution failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/runScriptErrorResponse'
 components:
   schemas:
     getFileResponse:
@@ -59,4 +105,53 @@ components:
         content:
           type: string
           description: The new content of the file.
-          required: true
+    createEnvRequest:
+      type: object
+      required:
+      - env_name
+      properties:
+        env_name:
+          type: string
+          description: The name of the new environment.
+    createEnvResponse:
+      type: object
+      properties:
+        output:
+          type: string
+          description: The output of the command.
+    createEnvErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error message.
+        output:
+          type: string
+          description: The output of the command before it failed.
+    runScriptRequest:
+      type: object
+      required:
+      - env_name
+      - script_path
+      properties:
+        env_name:
+          type: string
+          description: The name of the environment.
+        script_path:
+          type: string
+          description: The path to the Python script.
+    runScriptResponse:
+      type: object
+      properties:
+        output:
+          type: string
+          description: The output of the script.
+    runScriptErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error message.
+        output:
+          type: string
+          description: The output of the script before it failed.

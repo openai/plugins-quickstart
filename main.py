@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 
 from urllib.parse import unquote
 import quart
@@ -8,6 +9,42 @@ from quart_cors import cors
 
 app = quart.Quart(__name__)
 app = cors(app, allow_origin="https://chat.openai.com")
+
+
+@app.post("/execute")
+async def execute_command():
+    request_data = await quart.request.get_json(force=True)
+    command = request_data.get("command", "")
+    try:
+        result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
+        return quart.Response(response=json.dumps({"output": result.stdout}), status=200)
+    except subprocess.CalledProcessError as e:
+        return quart.Response(response=json.dumps({"error": str(e), "output": e.output}), status=400)
+
+
+@app.post("/create_env")
+async def create_env():
+    request_data = await quart.request.get_json(force=True)
+    env_name = request_data.get("env_name", "")
+    command = f"conda create -n {env_name} python=3.10 -y"
+    try:
+        result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
+        return quart.Response(response=json.dumps({"output": result.stdout}), status=200)
+    except subprocess.CalledProcessError as e:
+        return quart.Response(response=json.dumps({"error": str(e), "output": e.output}), status=400)
+
+
+@app.post("/run_script")
+async def run_script():
+    request_data = await quart.request.get_json(force=True)
+    env_name = request_data.get("env_name", "")
+    script_path = request_data.get("script_path", "")
+    command = f"conda run -n {env_name} python {script_path}"
+    try:
+        result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
+        return quart.Response(response=json.dumps({"output": result.stdout}), status=200)
+    except subprocess.CalledProcessError as e:
+        return quart.Response(response=json.dumps({"error": str(e), "output": e.output}), status=400)
 
 
 @app.get("/files/<path:filename>")
