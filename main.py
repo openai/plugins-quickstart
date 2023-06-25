@@ -21,7 +21,17 @@ async def initialize_plugin():
 
         instructions = {
             "message": "Initialization successful. The conda environment 'debuggerGPT' is ready to use.",
-            "instructions": "As a Python Code Debugging Plugin, I can help you debug Python code files, manage Python environments, and manipulate files on your computer. Here are the main capabilities and how to use them: \n\n1) Execute Shell Commands: You can ask me to 'execute a command' and provide the command as a string. If you want to run the command in a specific environment, include the 'env_name' in your request. \n\n2) Run Python Scripts: You can ask me to 'run a Python script in a specific environment' and provide the path to the script and the name of the environment. \n\n3) Modify Files: You can use the 'modify a file' command to update the local file of the code. \n\n4) Debug Code: To debug a code, run the code, examine the output and error messages, decide how to fix the code, and then use the 'modify a file' command to update the code. Repeat this process until the code runs without errors."
+            "instructions": "As a Python Code Debugging Plugin, I can help you debug Python code files,"
+                            " manage Python environments, and manipulate files on your computer."
+                            " Here are the main capabilities and how to use them: \n\n1) "
+                            "Execute Shell Commands: You can ask me to 'execute a command' and provide the command as a string. "
+                            "If you want to run the command in a specific environment, include the 'env_name' in your request. "
+                            "\n\n2) Run Python Scripts: You can ask me to 'run a Python script in a specific environment' "
+                            "and provide the path to the script and the name of the environment. \n\n3) "
+                            "Modify Files: You can use the 'modify a file' command to update the local file of the code. "
+                            "\n\n4) Debug Code: To debug a code, run the code, examine the output and error messages, "
+                            "decide how to fix the code, and then use the 'modify a file' command to update the code. "
+                            "Repeat this process until the code runs without errors."
         }
         return quart.Response(response=json.dumps(instructions), status=200)
     except subprocess.CalledProcessError as e:
@@ -50,9 +60,10 @@ async def run_script():
     command = f"conda run -n {env_name} python {script_path}"
     try:
         result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
-        return quart.Response(response=json.dumps({"output": result.stdout}), status=200)
+        return quart.Response(response=json.dumps({"output": result.stdout, "error": result.stderr}), status=200)
     except subprocess.CalledProcessError as e:
-        return quart.Response(response=json.dumps({"error": str(e), "output": e.output}), status=400)
+        return quart.Response(response=json.dumps({"error": e.stderr, "output": e.output, "stderr": str(e)}), status=400)
+
 
 
 @app.get("/files/<path:filename>")
@@ -69,10 +80,22 @@ async def get_file(filename):
 @app.post("/files/<path:filename>")
 async def modify_file(filename):
     request_data = await quart.request.get_json(force=True)
-    filename = unquote(filename)  # URL-decode the filename
-    content = request_data.get("content", "")
+    filename = unquote(filename)
+    fixes = request_data.get("fixes", [])
+
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+
+    for fix in fixes:
+        start_line, end_line = fix["lines"]
+        new_code = fix["code"]
+        indentation = fix["indentation"]
+        indented_code = '\n'.join([indentation + line for line in new_code.split('\n')])
+        lines[start_line - 1:end_line] = [indented_code + '\n']
+
     with open(filename, 'w') as f:
-        f.write(content)
+        f.writelines(lines)
+
     return quart.Response(response='OK', status=200)
 
 

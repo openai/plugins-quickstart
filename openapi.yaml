@@ -8,6 +8,7 @@ servers:
 paths:
   /execute:
     post:
+      operationId: execute_command
       requestBody:
         required: true
         content:
@@ -29,6 +30,7 @@ paths:
                 $ref: '#/components/schemas/executeCommandErrorResponse'
   /run_script:
     post:
+      operationId: run_script
       requestBody:
         required: true
         content:
@@ -50,6 +52,7 @@ paths:
                 $ref: '#/components/schemas/runScriptErrorResponse'
   /files/{filename}:
     get:
+      operationId: get_file
       parameters:
       - name: filename
         in: path
@@ -66,6 +69,7 @@ paths:
         '404':
           description: File not found
     post:
+      operationId: modify_file
       parameters:
       - name: filename
         in: path
@@ -163,11 +167,27 @@ components:
     modifyFileRequest:
       type: object
       required:
-      - content
+        - fixes
       properties:
-        content:
-          type: string
-          description: The new content of the file.
+        fixes:
+          type: array
+          items:
+            type: object
+            required:
+              - lines
+              - code
+              - indentation
+            properties:
+              lines:
+                type: array
+                items:
+                  type: integer
+                minItems: 2
+                maxItems: 2
+              code:
+                type: string
+              indentation:
+                type: string
     modifyFileResponse:
       type: object
       properties:
