@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 import subprocess
 from urllib.parse import unquote
 import quart
@@ -60,15 +61,17 @@ async def run_script():
     command = f"conda run -n {env_name} python {script_path}"
     try:
         result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
+        print(result.stderr)
         return quart.Response(response=json.dumps({"output": result.stdout, "error": result.stderr}), status=200)
     except subprocess.CalledProcessError as e:
+        print(e.output)
         return quart.Response(response=json.dumps({"error": e.stderr, "output": e.output, "stderr": str(e)}), status=400)
 
 
 
 @app.get("/files/<path:filename>")
 async def get_file(filename):
-    filename = unquote(filename)  # URL-decode the filename
+    filename = unquote(filename)
     if os.path.exists(filename):
         with open(filename, 'r') as f:
             content = f.read()
@@ -87,7 +90,10 @@ async def modify_file(filename):
         lines = f.readlines()
 
     for fix in fixes:
-        start_line, end_line = fix["lines"]
+        if len(fix["lines"]) == 2:
+            start_line, end_line = fix["lines"]
+        elif len(fix["lines"]) == 1:
+            start_line, end_line = fix["lines"], fix["lines"]
         new_code = fix["code"]
         indentation = fix["indentation"]
         indented_code = '\n'.join([indentation + line for line in new_code.split('\n')])
