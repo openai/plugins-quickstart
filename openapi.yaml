@@ -90,6 +90,10 @@ paths:
       operationId: initialize_plugin
       requestBody:
         required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/initializePluginRequest'
       responses:
         '200':
           description: Successful operation
@@ -103,6 +107,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/initializePluginResponse'
+  /install_packages:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/installPackagesRequest'
+      responses:
+        '200':
+          description: Packages installed successfully
+        '400':
+          description: Error occurred while installing packages
 components:
   schemas:
     executeCommandRequest:
@@ -200,3 +217,20 @@ components:
         message:
           type: string
           description: The status of the initialization.
+    installPackagesRequest:
+      type: object
+      properties:
+        env_name:
+          type: string
+          description: The name of the environment. If not specified, defaults to 'debuggerGPT'.
+        packages:
+          type: array
+          items:
+            type: string
+          description: The list of Python packages to install.
+    initializePluginRequest:
+      type: object
+      properties:
+        env_name:
+          type: string
+          description: The name of the environment to create or use.

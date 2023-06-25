@@ -6,31 +6,44 @@ from urllib.parse import unquote
 import quart
 from quart import request
 from quart_cors import cors
+import re
 
 app = quart.Quart(__name__)
 app = cors(app, allow_origin="https://chat.openai.com")
 
 
+def remove_ansi_escape_sequences(text):
+    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+    return ansi_escape.sub('', text)
+
+
 @app.post("/initialize")
 async def initialize_plugin():
+    request_data = await quart.request.get_json(force=True)
+    env_name = request_data.get("env_name", "debuggerGPT")
     try:
-        # Check if the conda environment 'debuggerGPT' exists
+        # Check if the specified conda environment exists
         envs = subprocess.check_output(['conda', 'env', 'list']).decode('utf-8')
-        if 'debuggerGPT' not in envs:
-            # Create the conda environment 'debuggerGPT'
-            subprocess.run(['conda', 'create', '-n', 'debuggerGPT', 'python=3.10'], check=True)
+        if env_name not in envs:
+            # Create the specified conda environment
+            subprocess.run(['conda', 'create', '-n', env_name, 'python=3.10'], check=True)
 
         instructions = {
-            "message": "Initialization successful. The conda environment 'debuggerGPT' is ready to use.",
+            "message": "Initialization successful. The conda environment '" + env_name + "' is ready to use.",
             "instructions": "As a Python Code Debugging Plugin, I can help you debug Python code files,"
                             " manage Python environments, and manipulate files on your computer."
                             " Here are the main capabilities and how to use them: \n\n1) "
+                            "Initialization: Before using the plugin, initialize it by running the 'initialize_plugin' function. "
+                            "This function sets up a conda environment for running scripts. The default environment is 'debuggerGPT', "
+                            "but you can specify a different one during initialization or when running a script. \n\n2) "
                             "Execute Shell Commands: You can ask me to 'execute a command' and provide the command as a string. "
                             "If you want to run the command in a specific environment, include the 'env_name' in your request. "
-                            "\n\n2) Run Python Scripts: You can ask me to 'run a Python script in a specific environment' "
-                            "and provide the path to the script and the name of the environment. \n\n3) "
+                            "\n\n3) Run Python Scripts: You can ask me to 'run a Python script in a specific environment' "
+                            "and provide the path to the script and the name of the environment. Before running a script for the first time, "
+                            "I will check the code for non-native dependencies and ensure they are installed in the chosen environment. \n\n4) "
                             "Modify Files: You can use the 'modify a file' command to update the local file of the code. "
-                            "\n\n4) Debug Code: To debug a code, run the code, examine the output and error messages, "
+                            "\n\n5) Install Python Packages: You can ask me to 'install Python packages' and provide a list of packages to install in a specific environment. "
+                            "\n\n6) Debug Code: To debug a code, run the code, examine the output and error messages, "
                             "decide how to fix the code, and then use the 'modify a file' command to update the code. "
                             "Repeat this process until the code runs without errors."
         }
@@ -53,20 +66,35 @@ async def execute_command():
         return quart.Response(response=json.dumps({"error": str(e), "output": e.output}), status=400)
 
 
+@app.post("/install_packages")
+async def install_packages():
+    request_data = await quart.request.get_json(force=True)
+    env_name = request_data.get("env_name", "debuggerGPT")  # Default to 'debuggerGPT' if not specified
+    packages = request_data.get("packages", [])
+    for package in packages:
+        command = f"conda install -n {env_name} {package} -y"
+        try:
+            subprocess.run(command, shell=True, check=True)
+        except subprocess.CalledProcessError as e:
+            return quart.Response(response=json.dumps({"error": str(e)}), status=400)
+    return quart.Response(response='Packages installed successfully', status=200)
+
+
 @app.post("/run_script")
 async def run_script():
     request_data = await quart.request.get_json(force=True)
-    env_name = 'debuggerGPT'
+    env_name = request_data.get("env_name", "debuggerGPT")  # Default to 'debuggerGPT' if not specified
     script_path = request_data.get("script_path", "")
     command = f"conda run -n {env_name} python {script_path}"
     try:
         result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
-        print(result.stderr)
-        return quart.Response(response=json.dumps({"output": result.stdout, "error": result.stderr}), status=200)
+        processed_output = remove_ansi_escape_sequences(result.stdout)
+        # print(result.stderr)
+        return quart.Response(response=json.dumps({"output": processed_output, "error": result.stderr}), status=200)
     except subprocess.CalledProcessError as e:
-        print(e.output)
-        return quart.Response(response=json.dumps({"error": e.stderr, "output": e.output, "stderr": str(e)}), status=400)
-
+        # print(e.output)
+        return quart.Response(response=json.dumps({"error": e.stderr, "output": e.output, "stderr": str(e)}),
+                              status=400)
 
 
 @app.get("/files/<path:filename>")

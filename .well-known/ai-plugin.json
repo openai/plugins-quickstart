@@ -3,7 +3,7 @@
   "name_for_human": "Debugger",
   "name_for_model": "python_code_debugger",
   "description_for_human": "This plugin helps debug Python code, manage Python environments, and manipulate files on your computer.",
-  "description_for_model": "As a Python Code Debugging Plugin, I can help you debug Python code files, manage Python environments, and manipulate files on your computer. Before using the plugin, you need to initialize it by running the 'initialize_plugin' function. This function ensures that the conda environment 'debuggerGPT' is set up for running scripts. I can execute shell commands, run Python scripts, and modify files. To debug a code, run the code, examine the output and error messages, decide how to fix the code, and then use the 'modify a file' command to update the code. Repeat this process until the code runs without errors.",
+  "description_for_model": "As a Python Code Debugging Plugin, I can help you debug Python code files, manage Python environments, and manipulate files on your computer. Before using the plugin, you need to initialize it by running the 'initialize_plugin' function. This function ensures that a conda environment is set up for running scripts. The default environment is 'debuggerGPT', but you can specify a different one during initialization or when running a script. I can execute shell commands, run Python scripts, install Python packages, and modify files. To debug a code, run the code, examine the output and error messages, decide how to fix the code, and then use the 'modify a file' command to update the code. Repeat this process until the code runs without errors. Before running a script for the first time, I will check the code for non-native dependencies and ensure they are installed in the chosen environment.",
   "auth": {
     "type": "none"
   },
@@ -12,7 +12,7 @@
     "url": "http://localhost:5003/openapi.yaml"
   },
   "logo_url": "http://localhost:5003/logo.png",
-  "contact_email": "legal@example.com",
+  "contact_email": "mtavor556@gmail.com",
   "legal_info_url": "http://example.com/legal"
 }
   
