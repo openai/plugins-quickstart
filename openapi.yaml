@@ -6,70 +6,29 @@ info:
 servers:
    -  url: http://localhost:5003
 paths:
-  /files:
-    get:
-      operationId: getFile
-      summary: Get the contents of a file
-      parameters:
-      - in: query
-        name: filename
-        schema:
-            type: string
-        required: true
-        description: The name of the file.
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/getFileResponse'
+  /execute:
     post:
-      operationId: modifyFile
-      summary: Modify a file
-      parameters:
-      - in: query
-        name: filename
-        schema:
-            type: string
-        required: true
-        description: The name of the file.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/modifyFileRequest'
+              $ref: '#/components/schemas/executeCommandRequest'
       responses:
-        "200":
-          description: OK
-  /create_env:
-    post:
-      operationId: createEnv
-      summary: Create a new Conda environment
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/createEnvRequest'
-      responses:
-        "200":
-          description: OK
+        '200':
+          description: Command executed successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/createEnvResponse'
-        "400":
-          description: Environment creation failed
+                $ref: '#/components/schemas/executeCommandResponse'
+        '400':
+          description: Error occurred while executing command
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/createEnvErrorResponse'
+                $ref: '#/components/schemas/executeCommandErrorResponse'
   /run_script:
     post:
-      operationId: runScript
-      summary: Run a Python script in a Conda environment
       requestBody:
         required: true
         content:
@@ -77,49 +36,89 @@ paths:
             schema:
               $ref: '#/components/schemas/runScriptRequest'
       responses:
-        "200":
-          description: OK
+        '200':
+          description: Script ran successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/runScriptResponse'
-        "400":
-          description: Script execution failed
+        '400':
+          description: Error occurred while running script
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/runScriptErrorResponse'
+  /files/{filename}:
+    get:
+      parameters:
+      - name: filename
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: File content retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getFileResponse'
+        '404':
+          description: File not found
+    post:
+      parameters:
+      - name: filename
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/modifyFileRequest'
+      responses:
+        '200':
+          description: File modified successfully
+  /initialize:
+    post:
+      operationId: initialize_plugin
+      requestBody:
+        required: false
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/initializePluginResponse'
+        '400':
+          description: Error during initialization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/initializePluginResponse'
 components:
   schemas:
-    getFileResponse:
-      type: object
-      properties:
-        content:
-          type: string
-          description: The content of the file.
-    modifyFileRequest:
+    executeCommandRequest:
       type: object
       required:
-      - content
+      - command
       properties:
-        content:
+        command:
           type: string
-          description: The new content of the file.
-    createEnvRequest:
-      type: object
-      required:
-      - env_name
-      properties:
+          description: The command to execute.
         env_name:
           type: string
-          description: The name of the new environment.
-    createEnvResponse:
+          description: The name of the environment (optional).
+    executeCommandResponse:
       type: object
       properties:
         output:
           type: string
           description: The output of the command.
-    createEnvErrorResponse:
+    executeCommandErrorResponse:
       type: object
       properties:
         error:
@@ -155,3 +154,29 @@ components:
         output:
           type: string
           description: The output of the script before it failed.
+    getFileResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The content of the file.
+    modifyFileRequest:
+      type: object
+      required:
+      - content
+      properties:
+        content:
+          type: string
+          description: The new content of the file.
+    modifyFileResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The status of the file modification.
+    initializePluginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The status of the initialization.

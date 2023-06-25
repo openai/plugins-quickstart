@@ -1,7 +1,6 @@
 import json
 import os
 import subprocess
-
 from urllib.parse import unquote
 import quart
 from quart import request
@@ -11,22 +10,31 @@ app = quart.Quart(__name__)
 app = cors(app, allow_origin="https://chat.openai.com")
 
 
+@app.post("/initialize")
+async def initialize_plugin():
+    try:
+        # Check if the conda environment 'debuggerGPT' exists
+        envs = subprocess.check_output(['conda', 'env', 'list']).decode('utf-8')
+        if 'debuggerGPT' not in envs:
+            # Create the conda environment 'debuggerGPT'
+            subprocess.run(['conda', 'create', '-n', 'debuggerGPT', 'python=3.10'], check=True)
+
+        instructions = {
+            "message": "Initialization successful. The conda environment 'debuggerGPT' is ready to use.",
+            "instructions": "As a Python Code Debugging Plugin, I can help you debug Python code files, manage Python environments, and manipulate files on your computer. Here are the main capabilities and how to use them: \n\n1) Execute Shell Commands: You can ask me to 'execute a command' and provide the command as a string. If you want to run the command in a specific environment, include the 'env_name' in your request. \n\n2) Run Python Scripts: You can ask me to 'run a Python script in a specific environment' and provide the path to the script and the name of the environment. \n\n3) Modify Files: You can use the 'modify a file' command to update the local file of the code. \n\n4) Debug Code: To debug a code, run the code, examine the output and error messages, decide how to fix the code, and then use the 'modify a file' command to update the code. Repeat this process until the code runs without errors."
+        }
+        return quart.Response(response=json.dumps(instructions), status=200)
+    except subprocess.CalledProcessError as e:
+        return quart.Response(response=f'Error during initialization: {str(e)}', status=400)
+
+
 @app.post("/execute")
 async def execute_command():
     request_data = await quart.request.get_json(force=True)
     command = request_data.get("command", "")
-    try:
-        result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
-        return quart.Response(response=json.dumps({"output": result.stdout}), status=200)
-    except subprocess.CalledProcessError as e:
-        return quart.Response(response=json.dumps({"error": str(e), "output": e.output}), status=400)
-
-
-@app.post("/create_env")
-async def create_env():
-    request_data = await quart.request.get_json(force=True)
-    env_name = request_data.get("env_name", "")
-    command = f"conda create -n {env_name} python=3.10 -y"
+    env_name = request_data.get("env_name", None)
+    if env_name:
+        command = f"conda run -n {env_name} {command}"
     try:
         result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
         return quart.Response(response=json.dumps({"output": result.stdout}), status=200)
@@ -37,7 +45,7 @@ async def create_env():
 @app.post("/run_script")
 async def run_script():
     request_data = await quart.request.get_json(force=True)
-    env_name = request_data.get("env_name", "")
+    env_name = 'debuggerGPT'
     script_path = request_data.get("script_path", "")
     command = f"conda run -n {env_name} python {script_path}"
     try:
