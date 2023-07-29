@@ -1,8 +1,11 @@
 import json
 
+import os
 import quart
 import quart_cors
 from quart import request
+
+REMOTE_URL = os.getenv('REMOTE_URL', None)
 
 app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
 
@@ -40,6 +43,8 @@ async def plugin_manifest():
     host = request.headers['Host']
     with open("./.well-known/ai-plugin.json") as f:
         text = f.read()
+        if REMOTE_URL:
+            text = text.replace("http://localhost:5003", REMOTE_URL)
         return quart.Response(text, mimetype="text/json")
 
 @app.get("/openapi.yaml")
@@ -47,6 +52,8 @@ async def openapi_spec():
     host = request.headers['Host']
     with open("openapi.yaml") as f:
         text = f.read()
+        if REMOTE_URL:
+            text = text.replace("http://localhost:5003", REMOTE_URL)
         return quart.Response(text, mimetype="text/yaml")
 
 def main():
