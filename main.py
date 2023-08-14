@@ -73,18 +73,6 @@ async def query(username):
     for l in response.json()["listings"]:
         landing_url = COMPASS_URL + l["canonicalPageLink"]
         print(landing_url)
-        bedroomsNumber = "unknown"
-        if l["size"] is not None && l["size"]["bedrooms"] is not None:
-            bedroomsNumber = l["size"]["bedrooms"]
-        print(bedroomsNumber)
-        fullBathRoomNumber = "unknown"
-        if l["size"] is not None && l["size"]["fullBathrooms"] is not None:
-            fullBathRoomNumber = l["size"]["fullBathrooms"]
-        print(fullBathRoomNumber)
-        imageUrl = ""
-        if l["media"] is not None && l["media"][0] is not None && l["media"][0]["thumbnailUrl"] is not None:
-            imageUrl = l["media"][0]["thumbnailUrl"]
-        print(imageUrl)
         properties.append(landing_url)
     return quart.Response(response=json.dumps(properties), status=200)
 
