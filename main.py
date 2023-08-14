@@ -39,7 +39,7 @@ async def query(username):
     #     url="https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057",
     #     description="central-west-57th-street-manhattan-ny-10019",
     #     score=1.0)
-    payload = {"agentSearch": true,"listingTypes": [2],"mlsPanelSourceName": "compass_nyc","saleStatuses": [12,9],"geographies": ["nyc"],"majorContributingDatasets": ["nyc_rls_dla","nyc_sibor","westchester_ny_onekey","westchester_ny_onekey_grid","nyc_bkmls","listing_editor_manual","ACRIS","RealPlus","olr_sales","western_ny_wnyreis","western_ny_wnyreis_trestle","northern_nj_gsmls","long_island_mlsli","westchester_ny_hgar","nyc_rls_reso","nyc_exclusives"],"facetFieldNames": ["isOffMls","saleStatus"],"combinedSortOrders": [{"sortOrder": 113}],"sortOrder": 113,"start": 0,"experiments": ["recolorado_data_merge","agent_search_use_map_search_tiler","search_query_westchester_ny_onekey"]}
+    payload = {"agentSearch": True,"listingTypes": [2],"mlsPanelSourceName": "compass_nyc","saleStatuses": [12,9],"geographies": ["nyc"],"majorContributingDatasets": ["nyc_rls_dla","nyc_sibor","westchester_ny_onekey","westchester_ny_onekey_grid","nyc_bkmls","listing_editor_manual","ACRIS","RealPlus","olr_sales","western_ny_wnyreis","western_ny_wnyreis_trestle","northern_nj_gsmls","long_island_mlsli","westchester_ny_hgar","nyc_rls_reso","nyc_exclusives"],"facetFieldNames": ["isOffMls","saleStatus"],"combinedSortOrders": [{"sortOrder": 113}],"sortOrder": 113,"start": 0,"experiments": ["recolorado_data_merge","agent_search_use_map_search_tiler","search_query_westchester_ny_onekey"]}
     if request["minPrice"] is not None:
        payload["minPrice"]=request["minPrice"]
     if request["maxPrice"] is not None:
