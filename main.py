@@ -60,6 +60,7 @@ async def query(username):
                 "https://www.compass.com/app/listing/432-park-avenue-unit-ph96-manhattan-ny-10022/1313115650069090185",
                 "https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057"]
     properties=[]
+    print(payload)
     response = requests.post("https://compass.com/api/v3/search/listTranslation", json=payload, headers=get_auth_header())
     print(response)
     print(response.json())
