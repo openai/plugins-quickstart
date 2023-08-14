@@ -38,13 +38,14 @@ async def query(username):
     #     url="https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057",
     #     description="central-west-57th-street-manhattan-ny-10019",
     #     score=1.0)
-    payload = '{"minBedrooms": 3, "geographies": ["nyc"]}'
+    payload = {'minBedrooms': 3, 'geographies': ['nyc']}
     properties=["https://www.compass.com/app/listing/217-west-57th-street-unit-107-manhattan-ny-10019/1262365637693399233",
                 "https://www.compass.com/app/listing/217-west-57th-street-unit-ph-manhattan-ny-10019/1200211444829995265",
                 "https://www.compass.com/app/listing/432-park-avenue-unit-ph96-manhattan-ny-10022/1313115650069090185",
                 "https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057"]
     response = requests.post("https://compass.com/api/v3/search/listTranslation", json=payload, headers=get_auth_header())
     print(response)
+    print(response.json())
     return quart.Response(response=json.dumps(properties), status=200)
 
 
@@ -89,7 +90,7 @@ async def openapi_spec():
         return quart.Response(text, mimetype="text/yaml")
 
 def get_auth_header():
-    return {"Content-Type": "application/json"}
+    return {"Authorization": "Bearer {}".format(COMPASS_API_KEY)}
 
 def main():
     app.run(debug=True, host="0.0.0.0", port=5003)
