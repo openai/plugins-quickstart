@@ -3,6 +3,7 @@ import os
 import requests
 import quart
 import quart_cors
+import gis as gis
 from quart import request
 
 
@@ -38,7 +39,8 @@ async def query(username):
     #     url="https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057",
     #     description="central-west-57th-street-manhattan-ny-10019",
     #     score=1.0)
-    payload = {"agentSearch": True,"listingTypes": [2],"mlsPanelSourceName": "compass_nyc","saleStatuses": [12,9],"geographies": ["nyc"],"majorContributingDatasets": ["nyc_rls_dla","nyc_sibor","westchester_ny_onekey","westchester_ny_onekey_grid","nyc_bkmls","listing_editor_manual","ACRIS","RealPlus","olr_sales","western_ny_wnyreis","western_ny_wnyreis_trestle","northern_nj_gsmls","long_island_mlsli","westchester_ny_hgar","nyc_rls_reso","nyc_exclusives"],"facetFieldNames": ["isOffMls","saleStatus"],"combinedSortOrders": [{"sortOrder": 113}],"sortOrder": 113,"start": 0,"experiments": ["recolorado_data_merge","agent_search_use_map_search_tiler","search_query_westchester_ny_onekey"]}
+    payload = {"agentSearch": True,"listingTypes": [2]}
+    payload["saleStatuses"] = [9, 12]
 
     if request.get("minPrice") is not None:
        payload["minPrice"]=request.get("minPrice")
@@ -61,6 +63,22 @@ async def query(username):
     if request.get("num") is not None:
        payload["num"]=request.get("num")
 
+    if request.get("locations") is not None:
+        locations = request.get("locations")
+        state = "NY"
+        location_ids = []
+        nbhs = []
+        for location in locations:
+            key = location.lower() + "-" + state
+            if gis.locations.get(key) is not None:
+                location_ids.append(gis.locations.get(key))
+            else:
+                nbhs.append(location.lower())
+        if len(location_ids) > 0:
+            payload["locationIds"] = location_ids
+        else:
+            payload["neighborhoods"] = nbhs
+
     properties=["https://www.compass.com/app/listing/217-west-57th-street-unit-107-manhattan-ny-10019/1262365637693399233",
                 "https://www.compass.com/app/listing/217-west-57th-street-unit-ph-manhattan-ny-10019/1200211444829995265",
                 "https://www.compass.com/app/listing/432-park-avenue-unit-ph96-manhattan-ny-10022/1313115650069090185",
@@ -73,7 +91,30 @@ async def query(username):
     for l in response.json()["listings"]:
         landing_url = COMPASS_URL + l["canonicalPageLink"]
         print(landing_url)
-        properties.append(landing_url)
+        listingType = "unknown"
+        if l.get("detailedInfo") is not None and l["detailedInfo"].get("propertyType") is not None and l["detailedInfo"]["propertyType"].get("masterType") is not None and l["detailedInfo"]["propertyType"]["masterType"].get("GLOBAL") is not None:
+            listingType = l["detailedInfo"]["propertyType"]["masterType"]["GLOBAL"]
+        price = "unknown"
+        if l.get("price") is not None and l["price"].get("listed") is not None:
+            price = l["price"]["listed"]
+        bedroomsNumber = "unknown"
+        if l.get("size") is not None and l["size"].get("bedrooms") is not None:
+            bedroomsNumber = l["size"]["bedrooms"]
+        print(bedroomsNumber)
+        totalBathrooms = "unknown"
+        if l.get("size") is not None and l["size"].get("totalBathrooms") is not None:
+            totalBathrooms = l["size"]["totalBathrooms"]
+        print(totalBathrooms)
+        sqft = "unknown"
+        if l.get("size") is not None and l["size"].get("squareFeet") is not None:
+            sqft = l["size"]["squareFeet"]
+        print(sqft)
+        imageUrl = ""
+        if l.get("media") is not None and l["media"][0] is not None and l["media"][0].get("thumbnailUrl") is not None:
+            imageUrl = l["media"][0]["thumbnailUrl"]
+        print(imageUrl)
+        listing = {"Display URL": landing_url, "type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": totalBathrooms, "square feet": sqft, "thumbnail": imageUrl}
+        properties.append(listing)
     return quart.Response(response=json.dumps(properties), status=200)
 
 
