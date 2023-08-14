@@ -60,6 +60,10 @@ async def query(username):
     if request.get("maxSquareFootage") is not None:
        payload["maxSquareFootage"]=request.get("maxSquareFootage")
 
+    if request.get("listingType") is not None:
+       if request.get("listingType") == 'rental': # default is sale
+           payload["listingTypes"] = [1, 3]
+
     if request.get("num") is not None:
        payload["num"]=request.get("num")
 
