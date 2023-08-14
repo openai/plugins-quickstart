@@ -91,8 +91,8 @@ async def query(username):
         landing_url = COMPASS_URL + l["canonicalPageLink"]
         print(landing_url)
         listingType = "unknown"
-        if l["detailedInfo"] is not None and l["detailedInfo"]["propertyType"] is not None and l["propertyType"]["masterType"] is not None and l["propertyType"]["masterType"]["GLOBAL"] is not None:
-            listingType = l["propertyType"]["masterType"]["GLOBAL"]
+        if l["detailedInfo"] is not None and l["detailedInfo"]["propertyType"] is not None and l["detailedInfo"]["propertyType"]["masterType"] is not None and l["detailedInfo"]["propertyType"]["masterType"]["GLOBAL"] is not None:
+            listingType = l["detailedInfo"]["propertyType"]["masterType"]["GLOBAL"]
         price = "unknown"
         if l["price"] is not None and l["price"]["listed"] is not None:
             price = l["price"]["listed"]
