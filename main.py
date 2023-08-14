@@ -9,6 +9,38 @@ app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.c
 # Keep track of todo's. Does not persist if Python session is restarted.
 _TODOS = {}
 
+@app.post("/query/<string:username>")
+async def query(username):
+    request = await quart.request.get_json(force=True)
+    print(request)
+    print("userQuery is {}".format(request["userQuery"]))
+    # queryResult1 = QueryResult(id="1262365637693399233",
+    #         text="217-west-57th-street-unit-107-manhattan-ny-10019",
+    #         url="https://www.compass.com/app/listing/217-west-57th-street-unit-107-manhattan-ny-10019/1262365637693399233",
+    #         description="217-west-57th-street-unit-107-manhattan-ny-10019",
+    #         score=1.0)
+    # queryResult2 = QueryResult(id="1200211444829995265",
+    #     text="217-west-57th-street-unit-ph-manhattan-ny-10019",
+    #     url="https://www.compass.com/app/listing/217-west-57th-street-unit-ph-manhattan-ny-10019/1200211444829995265",
+    #     description="217-west-57th-street-unit-ph-manhattan-ny-10019",
+    #     score=2.0)
+    # queryResult3 = QueryResult(id="1313115650069090185",
+    #     text="432-park-avenue-unit-ph96-manhattan-ny-10022",
+    #     url="https://www.compass.com/app/listing/432-park-avenue-unit-ph96-manhattan-ny-10022/1313115650069090185",
+    #     description="432-park-avenue-unit-ph96-manhattan-ny-10022",
+    #     score=1.0)
+    # queryResult4 = QueryResult(id="1138977360987454057",
+    #     text="central-west-57th-street-manhattan-ny-10019",
+    #     url="https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057",
+    #     description="central-west-57th-street-manhattan-ny-10019",
+    #     score=1.0)
+    properties=["https://www.compass.com/app/listing/217-west-57th-street-unit-107-manhattan-ny-10019/1262365637693399233",
+                "https://www.compass.com/app/listing/217-west-57th-street-unit-ph-manhattan-ny-10019/1200211444829995265",
+                "https://www.compass.com/app/listing/432-park-avenue-unit-ph96-manhattan-ny-10022/1313115650069090185",
+                "https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057"]
+    return quart.Response(response=json.dumps(properties), status=200)
+
+
 @app.post("/todos/<string:username>")
 async def add_todo(username):
     request = await quart.request.get_json(force=True)

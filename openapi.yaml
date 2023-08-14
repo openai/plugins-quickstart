@@ -6,6 +6,30 @@ info:
 servers:
   - url: https://plankton-app-pmrpv.ondigitalocean.app/
 paths:
+  /query/{username}:
+    post:
+      operationId: query
+      summary: Get the list of listings
+      parameters:
+      - in: path
+        name: username
+        schema:
+            type: string
+        required: true
+        description: The name of the user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
   /todos/{username}:
     get:
       operationId: getTodos
@@ -65,6 +89,23 @@ paths:
 
 components:
   schemas:
+    QueryRequest:
+      type: object
+      required:
+      - todo
+      properties:
+        userQuery:
+          type: string
+          description: The query which user has typed to search for properties.
+          required: true
+    QueryResponse:
+      type: object
+      properties:
+        properties:
+          type: array
+          items:
+            type: string
+          description: The list of properties urls.
     getTodosResponse:
       type: object
       properties:
