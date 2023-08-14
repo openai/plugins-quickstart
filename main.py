@@ -92,8 +92,8 @@ async def query(username):
         landing_url = COMPASS_URL + l["canonicalPageLink"]
         print(landing_url)
         listingType = "unknown"
-        if l["propertyType"] is not None and l["propertyType"]["masterType"] is not None and l["propertyType"]["masterType"]["GLOBAL"] is not None:
-            listingType = l["propertyType"]["masterType"]["GLOBAL"]
+        if l["detailedInfo"] is not None and l["detailedInfo"]["propertyType"] is not None and l["detailedInfo"]["propertyType"]["masterType"] is not None and l["detailedInfo"]["propertyType"]["masterType"]["GLOBAL"] is not None:
+            listingType = l["detailedInfo"]["propertyType"]["masterType"]["GLOBAL"]
         price = "unknown"
         if l["price"] is not None and l["price"]["listed"] is not None:
             price = l["price"]["listed"]
@@ -101,10 +101,10 @@ async def query(username):
         if l["size"] is not None and l["size"]["bedrooms"] is not None:
             bedroomsNumber = l["size"]["bedrooms"]
         print(bedroomsNumber)
-        fullBathRoomNumber = "unknown"
-        if l["size"] is not None and l["size"]["fullBathrooms"] is not None:
-            fullBathRoomNumber = l["size"]["fullBathrooms"]
-        print(fullBathRoomNumber)
+        totalBathrooms = "unknown"
+        if l["size"] is not None and l["size"]["totalBathrooms"] is not None:
+            totalBathrooms = l["size"]["totalBathrooms"]
+        print(totalBathrooms)
         sqft = "unknown"
         if l["size"] is not None and l["size"]["squareFeet"] is not None:
             sqft = l["size"]["squareFeet"]
@@ -113,7 +113,7 @@ async def query(username):
         if l["media"] is not None and l["media"][0] is not None and l["media"][0]["thumbnailUrl"] is not None:
             imageUrl = l["media"][0]["thumbnailUrl"]
         print(imageUrl)
-        listing = {"URL": landing_url, "type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": fullBathRoomNumber, "square feet": sqft, "thumbnail": imageUrl}
+        listing = {"URL": landing_url, "type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": totalBathrooms, "square feet": sqft, "thumbnail": imageUrl}
         properties.append(listing)
     return quart.Response(response=json.dumps(properties), status=200)
 
