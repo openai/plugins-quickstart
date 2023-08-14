@@ -18,7 +18,6 @@ assert COMPASS_API_KEY is not None
 async def query(username):
     request = await quart.request.get_json(force=True)
     print("request is {}".format(request))
-    print("userQuery is {}".format(request["userQuery"]))
     # queryResult1 = QueryResult(id="1262365637693399233",
     #         text="217-west-57th-street-unit-107-manhattan-ny-10019",
     #         url="https://www.compass.com/app/listing/217-west-57th-street-unit-107-manhattan-ny-10019/1262365637693399233",
