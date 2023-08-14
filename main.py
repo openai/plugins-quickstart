@@ -39,20 +39,27 @@ async def query(username):
     #     description="central-west-57th-street-manhattan-ny-10019",
     #     score=1.0)
     payload = {"agentSearch": True,"listingTypes": [2],"mlsPanelSourceName": "compass_nyc","saleStatuses": [12,9],"geographies": ["nyc"],"majorContributingDatasets": ["nyc_rls_dla","nyc_sibor","westchester_ny_onekey","westchester_ny_onekey_grid","nyc_bkmls","listing_editor_manual","ACRIS","RealPlus","olr_sales","western_ny_wnyreis","western_ny_wnyreis_trestle","northern_nj_gsmls","long_island_mlsli","westchester_ny_hgar","nyc_rls_reso","nyc_exclusives"],"facetFieldNames": ["isOffMls","saleStatus"],"combinedSortOrders": [{"sortOrder": 113}],"sortOrder": 113,"start": 0,"experiments": ["recolorado_data_merge","agent_search_use_map_search_tiler","search_query_westchester_ny_onekey"]}
-    if request["minPrice"] is not None:
-       payload["minPrice"]=request["minPrice"]
-    if request["maxPrice"] is not None:
-       payload["maxPrice"]=request["maxPrice"]
-    if request["minBedrooms"] is not None:
-       payload["minBedrooms"]=request["minBedrooms"]
-    if request["maxBedrooms"] is not None:
-       payload["maxBedrooms"]=request["maxBedrooms"]
-    if request["minSquareFootage"] is not None:
-       payload["minSquareFootage"]=request["minSquareFootage"]
-    if request["maxSquareFootage"] is not None:
-       payload["maxSquareFootage"]=request["maxSquareFootage"]
-    if request["num"] is not None:
-       payload["num"]=request["num"]
+
+    if request.get("minPrice") is not None:
+       payload["minPrice"]=request.get("minPrice")
+
+    if request.get("maxPrice") is not None:
+       payload["maxPrice"]=request.get("maxPrice")
+
+    if request.get("minBedrooms") is not None:
+       payload["minBedrooms"]=request.get("minBedrooms")
+
+    if request.get("maxBedrooms") is not None:
+       payload["maxBedrooms"]=request.get("maxBedrooms")
+
+    if request.get("minSquareFootage") is not None:
+       payload["minSquareFootage"]=request.get("minSquareFootage")
+
+    if request.get("maxSquareFootage") is not None:
+       payload["maxSquareFootage"]=request.get("maxSquareFootage")
+
+    if request.get("num") is not None:
+       payload["num"]=request.get("num")
 
     properties=["https://www.compass.com/app/listing/217-west-57th-street-unit-107-manhattan-ny-10019/1262365637693399233",
                 "https://www.compass.com/app/listing/217-west-57th-street-unit-ph-manhattan-ny-10019/1200211444829995265",
