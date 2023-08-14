@@ -122,6 +122,11 @@ components:
           type: float
           description: The maxSquareFootage attribute in a real estate API is the maximum square footage of a property that can have in order to be returned in the API response. For example, if you are looking for properties with no more than 1,000 square feet, you can use the maxSquareFootage attribute to filter the results to only include properties that have 1,000 square feet or fewer.
           required: false
+        locations:
+          type: array
+          items:
+            type: string
+            description: The location attribute in a real estate API is the neighborhood of a property. For example, if you are looking for properties in chelsea and hudson, you can use location attribute to filter the properties.
         num:
           type: float
           description: The number of results required by the user. For example, if query contains give me 10 properties which are more than 20 million dollars then num will be 10.

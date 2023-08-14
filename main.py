@@ -3,6 +3,7 @@ import os
 import requests
 import quart
 import quart_cors
+import gis as gis
 from quart import request
 
 
@@ -60,6 +61,22 @@ async def query(username):
 
     if request.get("num") is not None:
        payload["num"]=request.get("num")
+
+    if request.get("locations") is not None:
+        locations = request.get("locations")
+        state = "NY"
+        location_ids = []
+        nbhs = []
+        for location in locations:
+            key = location.lower() + "-" + state
+            if gis.locations.get(key) is not None:
+                location_ids.append(gis.locations.get(key))
+            else:
+                nbhs.append(location.lower())
+        if len(location_ids) > 0:
+            payload["locationIds"] = location_ids
+        else:
+            payload["neighborhoods"] = nbhs
 
     properties=["https://www.compass.com/app/listing/217-west-57th-street-unit-107-manhattan-ny-10019/1262365637693399233",
                 "https://www.compass.com/app/listing/217-west-57th-street-unit-ph-manhattan-ny-10019/1200211444829995265",
