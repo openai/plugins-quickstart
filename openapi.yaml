@@ -98,6 +98,34 @@ components:
           type: string
           description: The query which user has typed to search for properties.
           required: true
+        minPrice:
+          type: float
+          description: The minimum price of a property that is returned in the API response. For example, if you are looking for properties that are more than $500,000, you can use the minPrice attribute to filter the results to only include properties that have a price of $500,000 or more.
+          required: false
+        maxPrice:
+          type: float
+          description: The maximum price of a property that is returned in the API response. For example, if you are looking for properties that are less than $500,000, you can use the maxPrice attribute to filter the results to only include properties that have a price of $500,000 or less.
+          required: false
+        minBedrooms:
+          type: float
+          description: The minimum number of bedrooms that a property must have in order to be returned in the API response. For example, if you are looking for properties with at least 3 bedrooms, you can use the minBedrooms attribute to filter the results to only include properties that have 3 bedrooms or more.
+          required: false
+        maxBedrooms:
+          type: float
+          description: The maximum number of bedrooms that a property can have in order to be returned in the API response. For example, if you are looking for properties with no more than 3 bedrooms, you can use the maxBedrooms attribute to filter the results to only include properties that have 3 bedrooms or fewer.
+          required: false
+        minSquareFootage:
+          type: float
+          description: The minSquareFootage attribute in a real estate API is the minimum square footage of a property that must have in order to be returned in the API response. For example, if you are looking for properties with at least 1,000 square feet, you can use the minSquareFootage attribute to filter the results to only include properties that have 1,000 square feet or more.
+          required: false
+        maxSquareFootage:
+          type: float
+          description: The maxSquareFootage attribute in a real estate API is the maximum square footage of a property that can have in order to be returned in the API response. For example, if you are looking for properties with no more than 1,000 square feet, you can use the maxSquareFootage attribute to filter the results to only include properties that have 1,000 square feet or fewer.
+          required: false
+        num:
+          type: float
+          description: The number of results required by the user. For example, if query contains give me 10 properties which are more than 20 million dollars then num will be 10.
+          required: false
     QueryResponse:
       type: object
       properties:

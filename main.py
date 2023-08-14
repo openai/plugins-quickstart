@@ -11,12 +11,13 @@ app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.c
 # Keep track of todo's. Does not persist if Python session is restarted.
 _TODOS = {}
 COMPASS_API_KEY = os.environ.get("COMPASS_API_KEY")
+COMPASS_URL="https://www.compass.com"
 assert COMPASS_API_KEY is not None
 
 @app.post("/query/<string:username>")
 async def query(username):
     request = await quart.request.get_json(force=True)
-    print(request)
+    print("request is {}".format(request))
     print("userQuery is {}".format(request["userQuery"]))
     # queryResult1 = QueryResult(id="1262365637693399233",
     #         text="217-west-57th-street-unit-107-manhattan-ny-10019",
@@ -38,14 +39,34 @@ async def query(username):
     #     url="https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057",
     #     description="central-west-57th-street-manhattan-ny-10019",
     #     score=1.0)
-    payload = {'minBedrooms': 3, 'geographies': ['nyc']}
+    payload = {"agentSearch": true,"listingTypes": [2],"mlsPanelSourceName": "compass_nyc","saleStatuses": [12,9],"geographies": ["nyc"],"majorContributingDatasets": ["nyc_rls_dla","nyc_sibor","westchester_ny_onekey","westchester_ny_onekey_grid","nyc_bkmls","listing_editor_manual","ACRIS","RealPlus","olr_sales","western_ny_wnyreis","western_ny_wnyreis_trestle","northern_nj_gsmls","long_island_mlsli","westchester_ny_hgar","nyc_rls_reso","nyc_exclusives"],"facetFieldNames": ["isOffMls","saleStatus"],"combinedSortOrders": [{"sortOrder": 113}],"sortOrder": 113,"start": 0,"experiments": ["recolorado_data_merge","agent_search_use_map_search_tiler","search_query_westchester_ny_onekey"]}
+    if request["minPrice"] is not None:
+       payload["minPrice"]=request["minPrice"]
+    if request["maxPrice"] is not None:
+       payload["maxPrice"]=request["maxPrice"]
+    if request["minBedrooms"] is not None:
+       payload["minBedrooms"]=request["minBedrooms"]
+    if request["maxBedrooms"] is not None:
+       payload["maxBedrooms"]=request["maxBedrooms"]
+    if request["minSquareFootage"] is not None:
+       payload["minSquareFootage"]=request["minSquareFootage"]
+    if request["maxSquareFootage"] is not None:
+       payload["maxSquareFootage"]=request["maxSquareFootage"]
+    if request["num"] is not None:
+       payload["num"]=request["num"]
+
     properties=["https://www.compass.com/app/listing/217-west-57th-street-unit-107-manhattan-ny-10019/1262365637693399233",
                 "https://www.compass.com/app/listing/217-west-57th-street-unit-ph-manhattan-ny-10019/1200211444829995265",
                 "https://www.compass.com/app/listing/432-park-avenue-unit-ph96-manhattan-ny-10022/1313115650069090185",
                 "https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057"]
+    properties=[]
     response = requests.post("https://compass.com/api/v3/search/listTranslation", json=payload, headers=get_auth_header())
     print(response)
     print(response.json())
+    for l in response.json()["listings"]:
+        landing_url = COMPASS_URL + l["canonicalPageLink"]
+        print(landing_url)
+        properties.append(landing_url)
     return quart.Response(response=json.dumps(properties), status=200)
 
 
