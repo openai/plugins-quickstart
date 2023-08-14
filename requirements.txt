@@ -1,2 +1,5 @@
 quart
 quart-cors
+requests
+requests-aws4auth
+boto3
