@@ -88,7 +88,7 @@ async def openapi_spec():
         text = f.read()
         return quart.Response(text, mimetype="text/yaml")
 
-def get_auth_header()
+def get_auth_header():
     return {"Content-Type": "application/json"}
 
 def main():
