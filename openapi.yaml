@@ -127,6 +127,11 @@ components:
           items:
             type: string
             description: The location attribute in a real estate API is the neighborhood of a property. For example, if you are looking for properties in chelsea and hudson, you can use location attribute to filter the properties.
+        listingType:
+          type: string
+          enum: ["rental", "sale"]
+          description: The listingType attribute in a real estate API is the type of listing, it has value of "sale" or "rental". sale is the default value.
+          required: false
         num:
           type: float
           description: The number of results required by the user. For example, if query contains give me 10 properties which are more than 20 million dollars then num will be 10.

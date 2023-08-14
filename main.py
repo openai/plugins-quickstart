@@ -60,6 +60,10 @@ async def query(username):
     if request.get("maxSquareFootage") is not None:
        payload["maxSquareFootage"]=request.get("maxSquareFootage")
 
+    if request.get("listingType") is not None:
+       if request.get("listingType") == 'rental': # default is sale
+           payload["listingTypes"] = [1, 3]
+
     if request.get("num") is not None:
        payload["num"]=request.get("num")
 
@@ -115,6 +119,14 @@ async def query(username):
         print(imageUrl)
         listing = {"Display URL": landing_url, "type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": totalBathrooms, "square feet": sqft, "thumbnail": imageUrl}
         properties.append(listing)
+
+    if request.get("listingType") is not None:
+       listingType = request.get("listingType")
+       if listingType == 'rental':
+          properties.append("More listings : https://www.compass.com/for-rent/")
+       else:
+          properties.append("More listings : https://www.compass.com/homes-for-sale/")
+
     return quart.Response(response=json.dumps(properties), status=200)
 
 
