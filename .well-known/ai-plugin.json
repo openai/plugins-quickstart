@@ -9,9 +9,9 @@
     },
     "api": {
       "type": "openapi",
-      "url": "https://chat-gpt-plugin-8vcfb.ondigitalocean.app/openapi.yaml"
+      "url": "https://plankton-app-pmrpv.ondigitalocean.app/openapi.yaml"
     },
-    "logo_url": "https://chat-gpt-plugin-8vcfb.ondigitalocean.app/logo.png",
+    "logo_url": "https://plankton-app-pmrpv.ondigitalocean.app/logo.png",
     "contact_email": "press@compass.com",
     "legal_info_url": "http://compass.com/legal"
   }

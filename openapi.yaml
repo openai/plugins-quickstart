@@ -4,7 +4,7 @@ info:
   description: API lets you search real estate properties
   version: 'v1'
 servers:
-  - url: https://chat-gpt-plugin-8vcfb.ondigitalocean.app/
+  - url: https://plankton-app-pmrpv.ondigitalocean.app/
 paths:
   /todos/{username}:
     get:
