@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Compass Plugin
-  description: A plugin that allows the user to search for properties using ChatGPT.
+  description: API lets you search through real estate properties
   version: 'v1'
 servers:
   - url: https://chat-gpt-plugin-8vcfb.ondigitalocean.app/
