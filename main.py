@@ -1,13 +1,17 @@
 import json
-
+import os
+import requests
 import quart
 import quart_cors
 from quart import request
+
 
 app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
 
 # Keep track of todo's. Does not persist if Python session is restarted.
 _TODOS = {}
+COMPASS_API_KEY = os.environ.get("COMPASS_API_KEY")
+assert COMPASS_API_KEY is not None
 
 @app.post("/query/<string:username>")
 async def query(username):
@@ -34,10 +38,13 @@ async def query(username):
     #     url="https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057",
     #     description="central-west-57th-street-manhattan-ny-10019",
     #     score=1.0)
+    payload = '{"minBedrooms": 3, "geographies": ["nyc"]}'
     properties=["https://www.compass.com/app/listing/217-west-57th-street-unit-107-manhattan-ny-10019/1262365637693399233",
                 "https://www.compass.com/app/listing/217-west-57th-street-unit-ph-manhattan-ny-10019/1200211444829995265",
                 "https://www.compass.com/app/listing/432-park-avenue-unit-ph96-manhattan-ny-10022/1313115650069090185",
                 "https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057"]
+    response = requests.post("https://compass.com/api/v3/search/listTranslation", json=payload, headers=get_auth_header())
+    print(response)
     return quart.Response(response=json.dumps(properties), status=200)
 
 
@@ -80,6 +87,9 @@ async def openapi_spec():
     with open("openapi.yaml") as f:
         text = f.read()
         return quart.Response(text, mimetype="text/yaml")
+
+def get_auth_header()
+    return {"Content-Type": "application/json"}
 
 def main():
     app.run(debug=True, host="0.0.0.0", port=5003)
