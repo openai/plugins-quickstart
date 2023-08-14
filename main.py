@@ -98,26 +98,28 @@ async def query(username):
         listingType = "unknown"
         if l.get("detailedInfo") is not None and l["detailedInfo"].get("propertyType") is not None and l["detailedInfo"]["propertyType"].get("masterType") is not None and l["detailedInfo"]["propertyType"]["masterType"].get("GLOBAL") is not None:
             listingType = l["detailedInfo"]["propertyType"]["masterType"]["GLOBAL"]
+        
         price = "unknown"
         if l.get("price") is not None and l["price"].get("listed") is not None:
             price = l["price"]["listed"]
+            
         bedroomsNumber = "unknown"
         if l.get("size") is not None and l["size"].get("bedrooms") is not None:
             bedroomsNumber = l["size"]["bedrooms"]
-        print(bedroomsNumber)
+        
         totalBathrooms = "unknown"
         if l.get("size") is not None and l["size"].get("totalBathrooms") is not None:
             totalBathrooms = l["size"]["totalBathrooms"]
-        print(totalBathrooms)
+        
         sqft = "unknown"
         if l.get("size") is not None and l["size"].get("squareFeet") is not None:
             sqft = l["size"]["squareFeet"]
-        print(sqft)
+        
         imageUrl = ""
         if l.get("media") is not None and l["media"][0] is not None and l["media"][0].get("thumbnailUrl") is not None:
             imageUrl = l["media"][0]["thumbnailUrl"]
-        print(imageUrl)
-        listing = {"Display URL": landing_url, "type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": totalBathrooms, "square feet": sqft, "thumbnail": imageUrl}
+        
+        listing = {"Landing URL": landing_url, info: {"type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": totalBathrooms, "square feet": sqft}, "thumbnail": imageUrl}
         properties.append(listing)
 
     if request.get("listingType") is not None:
