@@ -131,6 +131,7 @@ async def query(username):
         properties.append(listing)
 
     html = {"htmlContent": get_html(properties)}
+    print(html)
 
     listingType = request.get("listingType")
     if listingType is not None and listingType == 'rental':
