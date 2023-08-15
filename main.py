@@ -123,14 +123,13 @@ async def query(username):
         listing = {"Landing URL": landing_url, "info": {"type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": totalBathrooms, "square feet": sqft}, "thumbnail": imageUrl}
         properties.append(listing)
 
-    if request.get("listingType") is not None:
-       listingType = request.get("listingType")
-       if listingType == 'rental':
-           properties.append("<a href='https://www.compass.com/for-rent/'>More listings</a>")
-           #properties.append("More listings : https://www.compass.com/for-rent/")
-       else:
-           # properties.append("More listings : https://www.compass.com/homes-for-sale/")
-           properties.append("<a href='https://www.compass.com/homes-for-sale/'>More listings</a>")
+    listingType = request.get("listingType")
+    if listingType is not None and listingType == 'rental':
+        properties.append("<a href='https://www.compass.com/for-rent/'>More listings</a>")
+        #properties.append("More listings : https://www.compass.com/for-rent/")
+    else:
+        properties.append("<a href='https://www.compass.com/homes-for-sale/'>More listings</a>")
+        # properties.append("More listings : https://www.compass.com/homes-for-sale/")
 
     return quart.Response(response=json.dumps(properties), status=200)
 
