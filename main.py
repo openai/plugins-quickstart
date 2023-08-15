@@ -137,19 +137,21 @@ async def query(username):
     print("Payload to List listTranslation API is: {}".format(json.dumps(payload)))
 
     # We make a call to list translation API.
-    response = requests.post("https://compass.com/api/v3/search/listTranslation", json=payload)
+    listingResponse = requests.post("https://compass.com/api/v3/search/listTranslation", json=payload)
 
     #print(response)
     #print(response.json())
 
-    status_code = response.status_code
+    response = dict();
+    status_code = listingResponse.status_code
     if status_code != 200:
         print("Encounterted error with status_code: {} and details: {}. Retry the API.".format(status_code, response.text))
-        default_footer(request, properties)
+        default_footer(request, response)
         return quart.Response(response=json.dumps(properties), status=200)
 
+
     # We will format the response now. In case there is no listing in response then skip this loop.
-    for l in response.json().get("listings", []):
+    for l in listingResponse.json().get("listings", []):
         landing_url = COMPASS_URL + l["canonicalPageLink"]
         print(landing_url)
         print(l.get("location"))
@@ -187,13 +189,14 @@ async def query(username):
         properties.append(listing)
 
 
-    html = {"htmlContent": get_html(properties)}
-    print(html)
+    # html = {"htmlContent": get_html(properties)}
+    # print(html)
 
-    default_footer(request, properties)
+    response["listings"] = properties;
+    default_footer(request, response);
 
     #return quart.Response(response=html, status=200, content_type="text/html")
-    return quart.Response(response=json.dumps(properties), status=200)
+    return quart.Response(response=json.dumps(response), status=200)
 
 @app.post("/todos/<string:username>")
 async def add_todo(username):
@@ -238,12 +241,12 @@ async def openapi_spec():
 def get_auth_header():
     return {"Authorization": "Bearer {}".format(COMPASS_API_KEY)}
 
-def default_footer(request, properties):
+def default_footer(request, response):
     listingType = request.get("listingType")
     if listingType is not None and listingType == 'rental':
-        properties.append("More listings : https://www.compass.com/for-rent/")
+        response["moreListingsLink"] = "https://www.compass.com/for-rent/"
     else:
-        properties.append("More listings : https://www.compass.com/homes-for-sale/")
+        response["moreListingsLink"] = "https://www.compass.com/homes-for-sale/"
 
 def get_location_id_from_name(locations):
     ids = []

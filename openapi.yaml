@@ -4,7 +4,7 @@ info:
   description: API lets you search real estate properties
   version: 'v1'
 servers:
-  - url: https://plankton-app-pmrpv.ondigitalocean.app/
+  - url: http://localhost:5003
 paths:
   /query/{username}:
     post:
@@ -770,13 +770,42 @@ components:
               - 5
               - 6
     QueryResponse:
+      description: the response returned to the user when we query this real estate API.
       type: object
       properties:
-        properties:
+        listings:
           type: array
           items:
-            type: string
-          description: The list of properties urls.
+            type: object
+            properties:
+              Landing URL:
+                type: string
+                description: the url link for this listing property
+              info:
+                type: object
+                description: the information regarding this listing.
+                properties:
+                  address:
+                    type: string
+                    description: address of the property
+                  price:
+                    type: string
+                    description: the price of the listing, for rental it is the monthly rent, for listing for sale, it is the sale price
+                  bedrooms:
+                    type: integer
+                    description: the number of bedrooms
+                  bathrooms:
+                    type: integer
+                    description: the number of total bathrooms
+                  square feet:
+                    type: integer
+                    description: the total square feet of the property
+              thumbnail:
+                type: string
+                description: the url of the thumbnail of the property
+        moreListingsLink:
+          type: string
+          description: A link to more listings for the user. It should always be displayed at the bottom of the response listings.
     getTodosResponse:
       type: object
       properties:
