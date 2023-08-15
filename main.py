@@ -91,13 +91,16 @@ async def query(username):
     properties=[]
     print(payload)
     response = requests.post("https://compass.com/api/v3/search/listTranslation", json=payload, headers=get_auth_header())
-    print(response)
-    print(response.json())
+    #print(response)
+    #print(response.json())
     for l in response.json()["listings"]:
         landing_url = COMPASS_URL + l["canonicalPageLink"]
         print(landing_url)
-
-        address = l.get("location").get("prettyAddress")
+        print(l.get("location"))
+        print(l.get("location").get("prettyAddress"))
+        address = "Property"
+        if l.get("location") is not None and l.get("location").get("prettyAddress") is not None:
+            address = l.get("location").get("prettyAddress")
 
         listingType = "unknown"
         if l.get("detailedInfo") is not None and l["detailedInfo"].get("propertyType") is not None and l["detailedInfo"]["propertyType"].get("masterType") is not None and l["detailedInfo"]["propertyType"]["masterType"].get("GLOBAL") is not None:
@@ -124,7 +127,7 @@ async def query(username):
         if l.get("media") is not None and l["media"][0] is not None and l["media"][0].get("thumbnailUrl") is not None:
             imageUrl = l["media"][0]["thumbnailUrl"]
         
-        listing = {"Landing URL": landing_url, "info": {"type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": totalBathrooms, "square feet": sqft, "address": address}, "thumbnail": imageUrl}
+        listing = {"Landing URL": landing_url, "info": {"address": address, "type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": totalBathrooms, "square feet": sqft}, "thumbnail": imageUrl}
         properties.append(listing)
 
     html = get_html(properties)
