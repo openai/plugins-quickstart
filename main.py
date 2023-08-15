@@ -130,7 +130,7 @@ async def query(username):
            #properties.append("More listings : https://www.compass.com/for-rent/")
        else:
            # properties.append("More listings : https://www.compass.com/homes-for-sale/")
-           properties.append("<a href='https://www.compass.com/for-rent/'>More listings</a>")
+           properties.append("<a href='https://www.compass.com/homes-for-sale/'>More listings</a>")
 
     return quart.Response(response=json.dumps(properties), status=200)
 
