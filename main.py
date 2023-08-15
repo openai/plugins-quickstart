@@ -191,7 +191,7 @@ def get_location_id_from_name(locations):
                 if cat.get("label") is not None and cat.get("label") == "Places" and cat.get("items") is not None:
                     for place in cat.get("items"):
                         if place.get("id") is not None:
-                            ids.append(place.get("id"))
+                            ids.append(int(place.get("id")))
     print(ids)
     return ids
 
