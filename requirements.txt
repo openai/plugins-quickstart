@@ -16,6 +16,7 @@ priority==2.0.0
 quart==0.18.4
 quart-cors==0.6.0
 requests==2.31.0
+tomli==2.0.1
 urllib3==2.0.4
 Werkzeug==2.3.7
 wsproto==1.2.0
