@@ -101,7 +101,8 @@ async def query(username):
 
         listingType = "unknown"
         if l.get("detailedInfo") is not None and l["detailedInfo"].get("propertyType") is not None and l["detailedInfo"]["propertyType"].get("masterType") is not None and l["detailedInfo"]["propertyType"]["masterType"].get("GLOBAL") is not None:
-            listingType = l["detailedInfo"]["propertyType"]["masterType"]["GLOBAL"]
+            globalarr = l["detailedInfo"]["propertyType"]["masterType"]["GLOBAL"]
+            listingType = ",".join(globalarr)
         
         price = "unknown"
         if l.get("price") is not None and l["price"].get("listed") is not None:
