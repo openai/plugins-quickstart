@@ -96,31 +96,31 @@ components:
       properties:
         userQuery:
           type: string
-          description: The query which user has typed to search for properties.
+          description: The user text query of a real estate search API query, to help people searching to buy or rent a home in the United States narrow down their results, based on the search preferences they’ve shared in their prompt, including, but not limited to, listing type (sale or rental), selling price or rent amount, number of bedrooms and/or bathrooms, square footage, property type, and other attributes.
           required: true
         minPrice:
           type: float
-          description: The minimum price of a property that is returned in the API response. For example, if you are looking for properties that are more than $500,000, you can use the minPrice attribute to filter the results to only include properties that have a price of $500,000 or more.
+          description: The minimum price of a property that is returned in a real estate search API response. For example, if you are looking for properties that are more than $500,000, you can use the minPrice attribute to filter the results to only include properties that have a price of $500,000 or more.
           required: false
         maxPrice:
           type: float
-          description: The maximum price of a property that is returned in the API response. For example, if you are looking for properties that are less than $500,000, you can use the maxPrice attribute to filter the results to only include properties that have a price of $500,000 or less.
+          description: The maximum price of a property that is returned in a real estate search API response. For example, if you are looking for properties that are less than $500,000, you can use the maxPrice attribute to filter the results to only include properties that have a price of $500,000 or less.
           required: false
         minBedrooms:
           type: float
-          description: The minimum number of bedrooms that a property must have in order to be returned in the API response. For example, if you are looking for properties with at least 3 bedrooms, you can use the minBedrooms attribute to filter the results to only include properties that have 3 bedrooms or more.
+          description: The minimum number of bedrooms that a property must have in order to be returned in a real estate search API response. For example, if you are looking for properties with at least 3 bedrooms, you can use the minBedrooms attribute to filter the results to only include properties that have 3 bedrooms or more.
           required: false
         maxBedrooms:
           type: float
-          description: The maximum number of bedrooms that a property can have in order to be returned in the API response. For example, if you are looking for properties with no more than 3 bedrooms, you can use the maxBedrooms attribute to filter the results to only include properties that have 3 bedrooms or fewer.
+          description: The maximum number of bedrooms that a property can have in order to be returned in a real estate search API response. For example, if you are looking for properties with no more than 3 bedrooms, you can use the maxBedrooms attribute to filter the results to only include properties that have 3 bedrooms or fewer.
           required: false
         minSquareFootage:
           type: float
-          description: The minSquareFootage attribute in a real estate API is the minimum square footage of a property that must have in order to be returned in the API response. For example, if you are looking for properties with at least 1,000 square feet, you can use the minSquareFootage attribute to filter the results to only include properties that have 1,000 square feet or more.
+          description: The minSquareFootage attribute in a real estate search API is the minimum square footage of a property that must have in order to be returned in the API response. For example, if you are looking for properties with at least 1,000 square feet, you can use the minSquareFootage attribute to filter the results to only include properties that have 1,000 square feet or more.
           required: false
         maxSquareFootage:
           type: float
-          description: The maxSquareFootage attribute in a real estate API is the maximum square footage of a property that can have in order to be returned in the API response. For example, if you are looking for properties with no more than 1,000 square feet, you can use the maxSquareFootage attribute to filter the results to only include properties that have 1,000 square feet or fewer.
+          description: The maxSquareFootage attribute in a real estate search API is the maximum square footage of a property that can have in order to be returned in the API response. For example, if you are looking for properties with no more than 1,000 square feet, you can use the maxSquareFootage attribute to filter the results to only include properties that have 1,000 square feet or fewer.
           required: false
         locations:
           type: array
@@ -129,13 +129,646 @@ components:
             description: The location attribute in a real estate API is the neighborhood of a property. For example, if you are looking for properties in chelsea and hudson, you can use location attribute to filter the properties.
         listingType:
           type: string
-          enum: ["rental", "sale"]
+          enum:
+            - 'rental'
+            - 'sale'
           description: The listingType attribute in a real estate API is the type of listing, it has value of "sale" or "rental". sale is the default value.
           required: false
         num:
           type: float
-          description: The number of results required by the user. For example, if query contains give me 10 properties which are more than 20 million dollars then num will be 10.
+          description: This attribute determines in a real estate search API, the number of search results to return. For example, if the user's prompt asks for 20 properties, then num should be set to 20. The API default is 10, so if the user doesn't specify, then 10 will be used as this attribute's value.
           required: false
+          default: 10
+        catsOk:
+          type: boolean
+          description: This attribute determines in a real estate search API if cats are permitted in the property or not. So if the user has one or more cats and has asked to live somewhere that allows cats in the building (i.e. it's a cat-friendly property), then this should be set to true.
+          required: false
+        dogsOk:
+          type: boolean
+          description: This attribute determines in a real estate search API if dogs are permitted in the property or not. So if the user has one or more dogs and has asked to live somewhere that allows dogs in the building (i.e. it's a dog-friendly property), then this should be set to true.
+          required: false
+        descriptionPhrases:
+          type: array
+          items:
+            type: string
+            description: A list of phrases to send to a real estate search API to find listings with matching description phrases, which commonly reference desired features of a home or property, such as swimming pool, back yard, dock, tennis court, private balcony, gated community, parking included, etc.
+          required: false
+        buildingAge:
+          type: array
+          items:
+            type: string
+            description: This attribute determines in a real estate search API the year that the building was originally built. The value of this attribute will be `Pre-war` if the building was built before 1940, or `Post-war` if the building was built after 1939 and before 1990, or `New Development` if the building was built in 1990 or later. "Pre-war" or "prewar" is most notably used when searching for real estate in the New York City market, however pre-war buildings can also be found in Philadelphia, San Francisco, Chicago and Boston. Users may be looking to live in a pre-war building, because they are often noted for their Old World elegance, historic charm and one-of-a-kind distinctive character. Prewar apartment buildings are defined as those that were built before World War II. The construction time span for these iconic urban buildings is usually defined as 1900 to 1939, but apartments dating back to the 1880s are often included in the prewar category. If the user is looking to live in a more modern building, constructed after World War II and before 1990, then they may search for a post-war or postwar building. Apartment buildings constructed after 1990 will often be referred to as New Construction or New Development.
+            enum:
+              - 'Pre-war'
+              - 'Post-war'
+              - 'New Development'
+            required: false
+        hasFireplace:
+          type: boolean
+          description: This attribute determines in a real estate search API if the home has one or more fireplaces. A user may want a home with a fireplace, especially in colder regions of the United States. For example, they may specify a wood burning or gas fireplace in their search terms, in which case this attribute should be set to true.
+          required: false
+        features:
+          type: array
+          required: false
+          items:
+            type: string
+            description: This attribute determines in a real estate search API the desirable features of the property being sought. For example, if a user is looking for laundry in the apartment they might ask for a washer dryer in the unit, in which case the attribute value to use is `Washer / Dryer in Unit`. If they are looking for the primary bedroom on the main floor, the value to pass is `Main Floor Master` or `Main Floor Primary`. If the user wants to find a home with a tennis court, then `Tennis Court` should be passed. If the user wants to find a home with a spiral staircase, then `Spiral Staircase` should be passed. If the user wants to find a home with a hot tub, then `Hot Tub` should be passed. If the user wants to find a home with a private balcony or terrace, then `Private Terrace` should be passed. If the user wants to find a home with a southern exposure to benefit from greater sunlight, then `Southern Exposure` should be passed. If the user wants to find a home with a ocean views, then `Ocean Views` should be passed.
+            enum:
+              - 'Junior 1'
+              - 'Junior 4'
+              - 'Floor Thru'
+              - 'Entire Floor'
+              - 'Ground Floor'
+              - 'Corner Unit'
+              - 'Corner Lot'
+              - 'Waterfront'
+              - 'Fourplex'
+              - 'Maisonette'
+              - 'Bungalow'
+              - 'Cape Cod'
+              - 'Colonial'
+              - 'Contemporary'
+              - 'Farm House'
+              - 'Tudor'
+              - 'Victorian'
+              - 'California Bungalow'
+              - 'Cottage'
+              - 'Mediterranean'
+              - 'Modern'
+              - 'Monterey Colonial'
+              - 'Spanish Colonial'
+              - 'Traditional'
+              - 'A-Frame'
+              - 'Garden Unit'
+              - 'Cabin'
+              - 'Elevator'
+              - 'Walk Up'
+              - 'Private Elevator'
+              - 'Freight Elevator'
+              - 'Service Elevator'
+              - 'Full-Time Doorman'
+              - 'Part-Time Doorman'
+              - 'Concierge'
+              - 'Doorman'
+              - 'Remote Doorman'
+              - 'Virtual Doorman'
+              - 'Full-Service Building'
+              - 'Washer / Dryer in Unit'
+              - 'Washer / Dryer Hookup'
+              - 'Washer / Dryer Not Allowed'
+              - 'Dryer'
+              - 'Washer'
+              - 'Washer / Dryer'
+              - 'Electric Dryer Hookup'
+              - 'Gas Dryer Hookup'
+              - 'Dryer Hookup'
+              - 'Propane Dryer Hookup'
+              - 'Washer Hookup'
+              - 'Media / Recreation Room'
+              - 'Formal Dining Room'
+              - 'Sleeping Loft'
+              - 'Foyer'
+              - 'Powder Room'
+              - 'Home Office'
+              - 'Dining Alcove'
+              - 'Library / Den'
+              - 'Dressing Area'
+              - 'Main Floor Master'
+              - 'Main Floor Primary'
+              - 'Art Studio'
+              - 'Music Room'
+              - 'Home Theater'
+              - 'Room and Floor'
+              - 'Exposed Brick'
+              - 'Working Fireplace'
+              - 'Decorative Fireplace'
+              - 'Fireplace'
+              - 'Spiral Staircase'
+              - 'Sound System'
+              - 'Private Entrance'
+              - 'Hardwood Floors'
+              - 'Parquet Floors'
+              - 'High Ceilings'
+              - 'Crown Mouldings'
+              - 'Decorative Mouldings'
+              - 'Columns'
+              - 'Wet Bar'
+              - 'Built-Ins'
+              - 'Attic'
+              - 'Curved Stairs'
+              - 'Double Staircase'
+              - 'Wall to Wall Carpeting'
+              - 'High Impact Doors'
+              - 'Carpet Floors'
+              - 'Ceramic Floors'
+              - 'Concrete Floors'
+              - 'Marble Floors'
+              - 'Terrazzo Floors'
+              - 'Tile Floors'
+              - 'Vinyl Floors'
+              - 'Stone Floors'
+              - 'Laminate Floors'
+              - 'Gym'
+              - 'Health Club'
+              - 'Pool'
+              - 'Indoor Pool'
+              - 'Plunge Pool'
+              - 'Steam Room'
+              - 'Hot Tub'
+              - 'Sauna'
+              - 'Basketball Court'
+              - 'Playroom'
+              - 'Yoga Studio'
+              - 'Rock Climbing'
+              - 'Racquet Ball'
+              - 'Nursery Room'
+              - 'Reside"s Lounge'
+              - 'Common Media / Recreation Room'
+              - 'Billiards Room'
+              - 'Pet Spa'
+              - 'Golf Room'
+              - 'Screening Room'
+              - 'Central Vacuum'
+              - 'Club House'
+              - 'Putting Green'
+              - 'Tennis Court'
+              - 'Trash Chute'
+              - 'Room For Pool'
+              - 'Hurricane Shutters'
+              - 'Above Ground Pool'
+              - 'Below Ground Pool'
+              - 'Heated Pool'
+              - 'Solar Heated Pool'
+              - 'Beach Membership'
+              - 'Boating'
+              - 'Electric Gate'
+              - 'Game Room'
+              - 'Golf Course Description'
+              - 'Horses Permitted'
+              - 'Picnic Area'
+              - 'Shuffle Board'
+              - 'Gazebo'
+              - 'Laundry Chute'
+              - 'Communal Pool'
+              - 'Communal Tennis Court'
+              - 'Pool House'
+              - 'Spa'
+              - 'Green House'
+              - 'Handicap Access'
+              - 'On Site Restaurant'
+              - 'Bocce Ball Court'
+              - 'Onsite Property Management'
+              - 'Infinity Pool'
+              - 'Common Balcony'
+              - 'Common Courtyard'
+              - 'Common Patio'
+              - 'Common Terrace'
+              - 'Full-Time Concierge'
+              - 'Part-Time Concierge'
+              - 'Elevator Operator'
+              - 'Smoke-free'
+              - 'Business Center'
+              - 'Dog Run/Park'
+              - 'Electric Vehicle Charging Station(s)'
+              - 'Squash Court'
+              - 'Valet Cleaners'
+              - 'Balcony'
+              - 'Juliet Balcony'
+              - 'Private Terrace'
+              - 'Private Wrap Around Terrace'
+              - 'Private Patio'
+              - 'Private Yard'
+              - 'Private Roof Deck'
+              - 'Roof Deck'
+              - 'Patio'
+              - 'Deck'
+              - 'Fence'
+              - 'Porch'
+              - 'Private Beach'
+              - 'Private Pool'
+              - 'Private Roads'
+              - 'Private dock'
+              - 'Back Yard'
+              - 'Front Yard'
+              - 'Gated Community'
+              - 'Private Outdoor Space'
+              - 'Common Roof Deck'
+              - 'Barbecue Area'
+              - 'Playground'
+              - 'Common Garden'
+              - 'Common Outdoor Space'
+              - 'Boat Dock'
+              - 'Cabana'
+              - 'Fishing Pier'
+              - 'Golf Course Community'
+              - 'Marina'
+              - 'Fruit Trees'
+              - 'Deeded Beach Access'
+              - 'Boat Lift'
+              - 'Boat Lock'
+              - 'Community Boat Dock'
+              - 'Water Access'
+              - 'Guest House'
+              - 'Ski In Access'
+              - 'Ski Out Access'
+              - 'Corral'
+              - 'Boat Slip'
+              - 'Beach Access'
+              - 'Common Boat Ramp'
+              - 'Common Deck'
+              - 'Common Hot Tub'
+              - 'Common Library'
+              - 'Common Sauna'
+              - 'Common Steam Room'
+              - 'Horse Trail'
+              - 'Pickleball'
+              - 'River Views'
+              - 'River Front'
+              - 'Central Park Views'
+              - 'Park Views'
+              - 'City Views'
+              - 'Limited Views'
+              - 'Open Views'
+              - 'Street Scape'
+              - 'Water Views'
+              - 'Sound Front'
+              - 'Sound Views'
+              - 'Ocean Access'
+              - 'Ocean Front'
+              - 'Ocean Views'
+              - 'Bay Front'
+              - 'Bay Views'
+              - 'Harborfront'
+              - 'Harbor Views'
+              - 'Intracoastal Views'
+              - 'Intracoastal Front'
+              - 'Lagoon Views'
+              - 'Lagoon Front'
+              - 'Lake Access'
+              - 'Lake Front'
+              - 'Lake Views'
+              - 'Mangrove Front'
+              - 'Pond Front'
+              - 'Pond Views'
+              - 'Creek Front'
+              - 'Creek Views'
+              - 'Canal Front'
+              - 'Canal Views'
+              - 'Garden Views'
+              - 'Golf Course Views'
+              - 'Mountain Views'
+              - 'Pool Views'
+              - 'Tennis Court Views'
+              - 'Point Lot'
+              - 'Sea Front'
+              - 'Beach Front'
+              - 'Stream Views'
+              - 'Bridge Views'
+              - 'Canyon Views'
+              - 'Catalina Views'
+              - 'Desert Views'
+              - 'Landmark Views'
+              - 'Marina Views'
+              - 'Panoramic Views'
+              - 'Pier Views'
+              - 'Wooden Area Views'
+              - 'Valley Views'
+              - 'Meadow Views'
+              - 'Orchard Views'
+              - 'Pasture Views'
+              - 'Vineyard Views'
+              - 'Bluff Views'
+              - 'Ridge Views'
+              - 'Hills Views'
+              - 'Forest Views'
+              - 'Downtown Views'
+              - 'Northern Exposure'
+              - 'Southern Exposure'
+              - 'Eastern Exposure'
+              - 'Western Exposure'
+              - 'Northeastern Exposure'
+              - 'Northwestern Exposure'
+              - 'Southeastern Exposure'
+              - 'Southwestern Exposure'
+              - 'Floor to Ceiling Windows'
+              - 'Bay Windows'
+              - 'Oversized Windows'
+              - 'Casement Windows'
+              - 'Soundproof Windows'
+              - 'Window Treatments'
+              - 'Dual Pane Windows'
+              - 'Granite Kitchen Counter'
+              - 'Marble Kitchen Counter'
+              - 'Premium Counters'
+              - 'Eat-in Kitchen'
+              - 'Breakfast Bar'
+              - 'Pullman Kitchen'
+              - 'Windowed Kitchen'
+              - 'Chef"s Kitchen'
+              - 'Open Kitchen'
+              - 'Second Kitchen'
+              - 'Breakfast Nook'
+              - 'Butlers Pantry'
+              - 'Galley Kitchen'
+              - 'Kitchenette'
+              - 'Dishwasher'
+              - 'Disposal'
+              - 'Microwave'
+              - 'Double Oven'
+              - 'Electric Oven'
+              - 'Gas Oven'
+              - 'Energy Star Appliances'
+              - 'Stainless Steel Appliances'
+              - 'No Stove'
+              - 'Double Refrigerator'
+              - 'Wine Cooler'
+              - 'Cooktop'
+              - 'Ice Maker'
+              - 'Wall Oven'
+              - 'Range Hood'
+              - 'Trash Compactor'
+              - 'Common Kitchen'
+              - 'Florida/Sun Room'
+              - 'Kitchen Dining'
+              - 'Electric Stove'
+              - 'Gas Stove'
+              - 'Refrigerator'
+              - 'Freezer'
+              - 'Pantry'
+              - 'Range'
+              - 'Stove'
+              - 'Island Kitchen'
+              - 'Windowed Bathroom'
+              - 'Marble Bathroom'
+              - 'Granite Bathroom'
+              - 'Jacuzzi Tub'
+              - 'Double Sink Bathroom'
+              - 'Master Ensuite'
+              - 'Primary Ensuite'
+              - 'Ceramic Bathroom'
+              - 'Bidet'
+              - 'Double Entry Bathroom'
+              - 'Master Ensuite with Separate Shower'
+              - 'Primary Ensuite with Separate Shower'
+              - 'Master Ensuite with Separate Tub'
+              - 'Primary Ensuite with Separate Tub'
+              - 'Attached Master Half Bathroom'
+              - 'Attached Primary Half Bathroom'
+              - 'Quarter Bath'
+              - 'Separate Vanities'
+              - 'Two-Person Tub'
+              - 'Soaking Tub'
+              - 'WaterSense Fixtures'
+              - 'Steam Shower'
+              - 'Total Renovation'
+              - 'Renovated Kitchen'
+              - 'Renovated Bath'
+              - 'Renovated Kitchen and Bath'
+              - 'Limited Light'
+              - 'Recessed Lighting'
+              - 'Chandeliers'
+              - 'Skylight'
+              - 'Solar Tubes'
+              - 'Walk-in Closet'
+              - 'California Closet'
+              - 'Custom Closet'
+              - 'Dual Closet'
+              - 'Central AC'
+              - 'Window AC can be Installed'
+              - 'Window AC Installed'
+              - 'Air Conditioning'
+              - 'Wall Unit'
+              - 'Ceiling Fan'
+              - 'Forced Air'
+              - 'Baseboard Heating'
+              - 'Central Heating'
+              - 'Energy Star System'
+              - 'Hot Water Heating'
+              - 'Radiant Heating'
+              - 'Alternative Heating System'
+              - 'Wall Heaters'
+              - 'Wood Burning Stove'
+              - 'Electric Heat'
+              - 'Gas Heat'
+              - 'Solar Heat'
+              - 'Air Purification System'
+              - 'Evaporative Cooling'
+              - 'Laundry in Building'
+              - 'Laundry on Every Floor'
+              - 'Laundry Room in Building'
+              - 'Laundry in Every Unit'
+              - 'Laundry on Every Other Floor'
+              - 'Laundry'
+              - 'Laundry Area'
+              - 'Common Laundry'
+              - 'Laundry Room'
+              - 'No Laundry'
+              - 'Intercom'
+              - 'Voice Intercom'
+              - 'Video Intercom'
+              - 'Video Security'
+              - 'Security Patrol'
+              - 'Security System'
+              - 'Security Gate'
+              - 'Bike Room'
+              - 'Cold Storage'
+              - 'Wine Storage'
+              - 'Wine Cellar'
+              - 'Private Storage Included'
+              - 'Private Storage For Rent'
+              - 'Common Storage'
+              - 'Storage Shed'
+              - 'Locker Ski Storage'
+              - 'Basement'
+              - 'Full Basement'
+              - 'Partial Basement'
+              - 'Crawl Space'
+              - 'Sump Pump'
+              - 'Heat Included'
+              - 'Hot Water Included'
+              - 'Gas Included'
+              - 'Electricity Included'
+              - 'Cable Included'
+              - 'Internet Included'
+              - 'Irrigation Water Included'
+              - 'Utilities Included'
+              - 'Solar Hot Water'
+              - 'Snow Removal Included'
+              - 'Satellite Dish'
+              - 'Sewage Included'
+              - 'Time Warner Cable (Cable / Internet)'
+              - 'Verizon FiOS (Cable / Internet)'
+              - 'Spectrum (Cable / Internet)'
+              - 'Garage'
+              - 'Automatic Garage Door'
+              - 'Attached Garage'
+              - 'Detached Garage'
+              - 'Bus Shuttle Service'
+              - 'Fully Furnished'
+              - 'Partially Furnished'
+              - 'Unfurnished'
+              - 'Rental'
+              - 'Co-op'
+              - 'Condo'
+              - 'Condo-op'
+              - 'Multi Family'
+              - 'Single Family'
+              - 'Fee Simple'
+              - 'Luxury'
+              - 'Highrise'
+              - 'Midrise'
+              - 'Lowrise'
+              - 'Brownstone'
+              - 'Townhouse'
+              - 'House'
+              - 'Hotel'
+              - 'Development Site'
+              - 'Ranch'
+              - 'Villa'
+              - 'Ranch/Farm'
+              - 'Building Age'
+              - 'Pre-war'
+              - 'Post-war'
+              - 'New Development'
+              - 'Building Construction'
+              - 'CBS Construction'
+              - 'Frame Construction'
+              - 'Full Walls Allowed'
+              - 'Partial Walls Allowed'
+              - 'No Walls Allowed'
+              - 'Shares Allowed'
+              - 'Shares Not Allowed'
+              - 'Lease Break'
+              - 'Lease Assignment'
+              - 'Market Lease'
+              - 'Stabilized Lease'
+              - 'Stabilized Lease with Preferential Rider'
+              - '1 Month Free Rent'
+              - '1 Month OP'
+              - '1 Month OP or 1 Month Free Rent'
+              - '1 Month OP and 1 Month Free Rent'
+              - 'Parking Included'
+              - 'Parking Available'
+              - 'Covered Parking'
+              - 'Heated Garage Parking'
+              - 'Street Parking'
+              - 'Off-Street Parking'
+              - 'Driveway'
+              - 'Shared Driveway'
+              - 'Gated Driveway'
+              - 'Surface Parking'
+              - 'On-site Parking'
+              - 'On-site Parking For Rent'
+              - 'On-site Parking For Sale'
+              - 'Attached Parking'
+              - 'Detached Parking'
+              - 'Underground Parking'
+              - 'Circle Drive'
+              - 'Golf Cart Storage'
+              - 'Valet Parking'
+              - 'Tandem Parking'
+              - 'Assigned Parking'
+              - 'Private Parking'
+              - 'Carport Parking'
+              - 'Common Parking'
+              - 'Unassigned Parking'
+              - 'Guest Parking'
+              - 'RV Parking'
+              - 'Subterranean Parking'
+              - 'Includes Parking'
+              - 'Parking for Sale/Rent'
+              - 'Street Only'
+              - 'Additional Parking'
+              - 'Parking Attendant'
+              - 'Parking Lot'
+              - 'Attach / Row Hse'
+              - 'Back to Back'
+              - 'Detached'
+              - 'Garden 1-4 Floors'
+              - 'Hi-Rise 9+ Floors'
+              - 'Mid-Rise 5-8 Floors'
+              - 'Other'
+              - 'Over-Storefront'
+              - 'Patio Home'
+              - 'Quad'
+              - 'Semi-Detached'
+              - 'Taxes Included'
+              - 'Insurance Included'
+              - 'Earthquake Insurance Included'
+              - 'Trash Included'
+              - 'Property Management Included'
+              - 'Common Area Maintenance Included'
+              - 'Security Included'
+              - 'Pet Friendly'
+              - 'No Dogs'
+              - 'No Cats'
+              - 'No Pets'
+              - 'Pets Conditional'
+        buildingNames:
+          type: array
+          required: false
+          items:
+            type: string
+            description: This attribute determines in a real estate search API the name of the building. For example, if the user is looking to live in the Central Park Tower skyscraper, then `Central Park Tower` should be passed in for this attribute.
+        minTotalBathrooms:
+          type: float
+          description: This attribute determines in a real estate search API the minimum number of bathrooms ("BA") being searched. This can be left null if no minimum value was expressed by the user. However, when searching for real estate, users will often enter a minimum number of bathrooms, in which case this attribute should be set to their desired bathroom count. For example, if the user has asked for there to be at least 2 bathrooms, then this attribute should be set to 2. If the user has asked for there to be no more than 2 bathrooms, then the maxTotalBathrooms attribute should be set instead. If a range of bathrooms is provided, such as 2-4 bathrooms, then this value should be 2 and the maxTotalBathrooms should be 4.
+          required: false
+        maxTotalBathrooms:
+          type: float
+          description: This attribute determines in a real estate search API the maximum number of bathrooms ("BA") being searched. This can be left null if no maximum value was expressed by the user. Typically, when searching for real estate, users will enter a minimum number of bathrooms, in which case the minTotalBathrooms attribute should be set to their desired bathroom count. However, if the user has asked for there to be at most 2.5 bathrooms, then this attribute should be set to 2.5.  If a range of bathrooms is provided, such as 2-4 bathrooms, then this value should be 4 and the minTotalBathrooms should be 2.
+          required: false
+        minBuildingFloors:
+          type: float
+          description: This attribute determines in a real estate search API the minimum number of floors in the building. For example, if the user wants to live in a very tall building, they may ask for buildings at least 10 stories high, in which case this attribute should be set to 10.
+          required: false
+        maxBuildingFloors:
+          Type: float
+          description: This attribute determines in a real estate search API the maximum number of floors in the building. For example, if the user does not want to live in a very tall building, they may ask for 4-story buildings, in which case this attribute should be set to 4.
+          required: false
+        minDOM:
+          type: float
+          description: This attribute determines in a real estate search API the minimum number of Days on Market ("DOM") the property has been on the market. Real estate agents may want to look for homes that have been on the market for a long time, in order to approach sellers and offer to help sell their home. Therefore, they may want to filter out properties that have been on the market for less than 180 days, in which case this attribute should be set to 180.
+          required: false
+        maxDOM:
+          type: float
+          description: This attribute determines in a real estate search API the maximum number of Days on Market ("DOM") the property has been on the market. Users usually assume that a home that has been on the market for a long time is less desirable than one that has been on the market for very little time. Therefore, they may want to filter out properties that have been on the market for more than 45 days, in which case this attribute should be set to 45.
+          required: false
+        minLastSoldPrice:
+          type: float
+          description: This attribute determines in a real estate search API the minimum last sold price of the property. When users are searching for real estate, especially when doing comparative market analyses, they may want to find properties that sold in a similar price range to the value of a home that is likely to list soon, in order to fully understand what homes are selling for in the same area and with the same number of bedrooms and bathrooms, among other features. If the user is specifically looking for homes which sold within a price range, then this attribute should be set to the minimum value of the range, and maxLastSoldPrice should be set to the maximum value of the range. Similarly, if they are looking for homes which sold over a certain dollar amount, then this attribute should be populated with that amount and maxLastSoldPrice should be null.
+        maxLastSoldPrice:
+          type: float
+          description: This attribute determines in a real estate search API the maximum last sold price of the property. When users are searching for real estate, especially when doing comparative market analyses, they may want to find properties that sold in a similar price range to the value of a home that is likely to list soon, in order to fully understand what homes are selling for in the same area and with the same number of bedrooms and bathrooms, among other features. If the user is specifically looking for homes which sold within a price range, then this attribute should be set to the maximum value of the range, and minLastSoldPrice should be set to the minimum value of the range. Similarly, if they are looking for homes which sold below a certain dollar amount, then this attribute should be populated with that amount and minLastSoldPrice should be null.
+          required: false
+        minCloseDate:
+          type: float
+          description: This attribute determines in a real estate search API the earliest sold date, in milliseconds elapsed since the UNIX epoch (Jan 1, 1970), when searching for properties that have been sold or rented. When users are searching for real estate, especially when doing comparative market analyses, they may want to find properties that sold within a certain (typically recent) timeframe, in order to fully understand the pace of sales within a local market. For example, if the user is specifically looking for homes which sold within the last 6 months, then this attribute should be set to six months earlier than "now" and converted to milliseconds elapsed since the UNIX epoch, and maxClosedate should be set to "now" and converted to milliseconds elapsed since the UNIX epoch. For example, if today date is 15th August 2023 and user is searching for properties sold in the last 1 month then the value of minCloseDate will be the epoch time stamp on 15th July 2023 which is 1689379200000. It has been computed by subtracting 1 month from today and then converting 15th July 2023 to epoch time stamp in milliseconds.
+        maxCloseDate:
+          type: float
+          description: This attribute determines in a real estate search API the latest sold date, in milliseconds elapsed since the UNIX epoch (Jan 1, 1970), when searching for properties that have been sold or rented. When users are searching for real estate, especially when doing comparative market analyses, they may want to find properties that sold within a certain (typically recent) timeframe, in order to fully understand the pace of sales within a local market. For example, if the user is specifically looking for homes which sold within the last 6 months, then this attribute should be set to "now" and converted to milliseconds elapsed since the UNIX epoch, and the minCloseDate should be set to six months earlier than "now" and converted to milliseconds elapsed since the UNIX epoch. For example, if today date is 15th August 2023 and user is searching for properties sold in the last 1 month then the value of minCloseDate will be the epoch time stamp on 15th July 2023 which is 1689379200000. It has been computed by subtracting 1 month from today and then converting 15th July 2023 to epoch time stamp in milliseconds. maxCloseDate will be the epoch time stamp on 15th August 2023 which is 1692057600000.
+          required: false
+        minOpenHouseDate:
+          type: float
+          description: This attribute determines in a real estate search API the earliest open house date, in milliseconds elapsed since the UNIX epoch (Jan 1, 1970), when searching for properties that can be viewed in person by the user. An open house is typically hosted by a real estate agent in order to show properties to prospective buyers or renters. Users may ask to see homes with an upcoming open house, in which case this should be set to the equivalent of "now" in milliseconds elapsed since the UNIX epoch. For example, if today date is 15th August 2023 then the value of minOpenHouseDate will be 1692057600000.
+          required: false
+        maxOpenHouseDate:
+          type: float
+          description: This attribute determines in a real estate search API the latest open house date, in milliseconds elapsed since the UNIX epoch (Jan 1, 1970), when searching for properties that can be viewed in person by the user. An open house is typically hosted by a real estate agent in order to show properties to prospective buyers or renters. Users may ask to see homes with an upcoming open house, in which case this should be set to 7 days from the current date and converted to milliseconds elapsed since the UNIX epoch. For example, if today date is 15th August 2023 then the value of maxOpenHouseDate will be 1692662400000. It has been computed by adding 7 days to today and then taking epoch time stamp in milliseconds.
+          required: false
+        compassListingTypes:
+          type: array
+          required: false
+          items:
+            type: integer
+            description: This attribute determines in a real estate search API the type of listing to find. The types can be set to `0` for "Coming Soon" listings that are not yet ready for showings, `2` for "Compass Exclusive" listings that are being offered by agents affiliated with the Compass real estate brokerage, `3` for "MLS Listings" that have been entered into a Multiple Listing System for transparency in the marketplace, `5` for "For Sale By Owner" listings that are being offered for sale directly by the homeowner, and `6` for "Not for Sale" properties which are not currently being offered for sale or rent.
+            enum:
+              - 0
+              - 2
+              - 3
+              - 4
+              - 5
+              - 6
     QueryResponse:
       type: object
       properties:

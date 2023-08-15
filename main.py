@@ -18,29 +18,9 @@ assert COMPASS_API_KEY is not None
 @app.post("/query/<string:username>")
 async def query(username):
     request = await quart.request.get_json(force=True)
-    print("request is {}".format(request))
-    # queryResult1 = QueryResult(id="1262365637693399233",
-    #         text="217-west-57th-street-unit-107-manhattan-ny-10019",
-    #         url="https://www.compass.com/app/listing/217-west-57th-street-unit-107-manhattan-ny-10019/1262365637693399233",
-    #         description="217-west-57th-street-unit-107-manhattan-ny-10019",
-    #         score=1.0)
-    # queryResult2 = QueryResult(id="1200211444829995265",
-    #     text="217-west-57th-street-unit-ph-manhattan-ny-10019",
-    #     url="https://www.compass.com/app/listing/217-west-57th-street-unit-ph-manhattan-ny-10019/1200211444829995265",
-    #     description="217-west-57th-street-unit-ph-manhattan-ny-10019",
-    #     score=2.0)
-    # queryResult3 = QueryResult(id="1313115650069090185",
-    #     text="432-park-avenue-unit-ph96-manhattan-ny-10022",
-    #     url="https://www.compass.com/app/listing/432-park-avenue-unit-ph96-manhattan-ny-10022/1313115650069090185",
-    #     description="432-park-avenue-unit-ph96-manhattan-ny-10022",
-    #     score=1.0)
-    # queryResult4 = QueryResult(id="1138977360987454057",
-    #     text="central-west-57th-street-manhattan-ny-10019",
-    #     url="https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057",
-    #     description="central-west-57th-street-manhattan-ny-10019",
-    #     score=1.0)
-    payload = {"agentSearch": True,"listingTypes": [2]}
-    payload["saleStatuses"] = [9, 12]
+    print("Request from ChatGpt is {}".format(request))
+    # Default payload
+    payload = {"agentSearch": True,"listingTypes": [2], "saleStatuses": [9, 12]}
 
     if request.get("minPrice") is not None:
        payload["minPrice"]=request.get("minPrice")
@@ -60,13 +40,6 @@ async def query(username):
     if request.get("maxSquareFootage") is not None:
        payload["maxSquareFootage"]=request.get("maxSquareFootage")
 
-    if request.get("listingType") is not None:
-       if request.get("listingType") == 'rental': # default is sale
-           payload["listingTypes"] = [1, 3]
-
-    if request.get("num") is not None:
-       payload["num"]=request.get("num")
-
     if request.get("locations") is not None:
         locations = request.get("locations")
         state = "NY"
@@ -84,16 +57,93 @@ async def query(username):
         if len(location_ids) > 0:
             payload["locationIds"] = location_ids
 
-    properties=["https://www.compass.com/app/listing/217-west-57th-street-unit-107-manhattan-ny-10019/1262365637693399233",
-                "https://www.compass.com/app/listing/217-west-57th-street-unit-ph-manhattan-ny-10019/1200211444829995265",
-                "https://www.compass.com/app/listing/432-park-avenue-unit-ph96-manhattan-ny-10022/1313115650069090185",
-                "https://www.compass.com/app/listing/central-west-57th-street-manhattan-ny-10019/1138977360987454057"]
+    if request.get("listingType") is not None:
+       if request.get("listingType") == 'rental': # default is sale
+           payload["listingTypes"] = [0, 3]
+
+    if request.get("num") is not None:
+       payload["num"]=request.get("num")
+
+    if request.get("catsOk") is not None:
+       payload["catsOk"]=request.get("catsOk")
+
+    if request.get("dogsOk") is not None:
+       payload["dogsOk"]=request.get("dogsOk")
+
+
+    if request.get("descriptionPhrases") is not None and len(request.get("descriptionPhrases")) > 0:
+       payload["descriptionPhrases"]=request.get("descriptionPhrases")
+
+    if request.get("buildingAge") is not None and len(request.get("buildingAge")) > 0:
+       payload["buildingAge"]=request.get("buildingAge")
+
+
+    if request.get("hasFireplace") is not None:
+       payload["hasFireplace"]=request.get("hasFireplace")
+
+    if request.get("features") is not None and len(request.get("features")) > 0:
+       payload["features"]=request.get("features")
+
+    if request.get("buildingNames") is not None and len(request.get("buildingNames")) > 0:
+       payload["buildingNames"]=request.get("buildingNames")
+
+    if request.get("minTotalBathrooms") is not None:
+       payload["minTotalBathrooms"]=request.get("minTotalBathrooms")
+
+    if request.get("maxTotalBathrooms") is not None:
+       payload["maxTotalBathrooms"]=request.get("maxTotalBathrooms")
+
+    if request.get("minBuildingFloors") is not None:
+       payload["minBuildingFloors"]=request.get("minBuildingFloors")
+
+    if request.get("maxBuildingFloors") is not None:
+       payload["maxBuildingFloors"]=request.get("maxBuildingFloors")
+
+    if request.get("minDOM") is not None:
+       payload["minDOM"]=request.get("minDOM")
+
+    if request.get("maxDOM") is not None:
+       payload["maxDOM"]=request.get("maxDOM")
+
+    if request.get("minLastSoldPrice") is not None:
+       payload["minLastSoldPrice"]=request.get("minLastSoldPrice")
+
+    if request.get("maxLastSoldPrice") is not None:
+       payload["maxLastSoldPrice"]=request.get("maxLastSoldPrice")
+
+    if request.get("minCloseDate") is not None:
+       payload["minCloseDate"]=request.get("minCloseDate")
+
+    if request.get("maxCloseDate") is not None:
+       payload["maxCloseDate"]=request.get("maxCloseDate")
+
+    if request.get("minOpenHouseDate") is not None:
+       payload["minOpenHouseDate"]=request.get("minOpenHouseDate")
+
+    if request.get("maxOpenHouseDate") is not None:
+       payload["maxOpenHouseDate"]=request.get("maxOpenHouseDate")
+
+    if request.get("compassListingTypes") is not None and len(request.get("compassListingTypes")) > 0:
+       payload["compassListingTypes"]=request.get("compassListingTypes")
+
     properties=[]
-    print(payload)
-    response = requests.post("https://compass.com/api/v3/search/listTranslation", json=payload, headers=get_auth_header())
+
+    print("Payload to List listTranslation API is: {}".format(json.dumps(payload)))
+
+    # We make a call to list translation API.
+    response = requests.post("https://compass.com/api/v3/search/listTranslation", json=payload)
+
     #print(response)
     #print(response.json())
-    for l in response.json()["listings"]:
+
+    status_code = response.status_code
+    if status_code != 200:
+        print("Encounterted error with status_code: {} and details: {}. Retry the API.".format(status_code, response.text))
+        default_footer(request, properties)
+        return quart.Response(response=json.dumps(properties), status=200)
+
+    # We will format the response now. In case there is no listing in response then skip this loop.
+    for l in response.json().get("listings", []):
         landing_url = COMPASS_URL + l["canonicalPageLink"]
         print(landing_url)
         print(l.get("location"))
@@ -130,36 +180,14 @@ async def query(username):
         listing = {"Landing URL": landing_url, "info": {"address": address, "type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": totalBathrooms, "square feet": sqft}, "thumbnail": imageUrl}
         properties.append(listing)
 
+
     html = {"htmlContent": get_html(properties)}
     print(html)
 
-    listingType = request.get("listingType")
-    if listingType is not None and listingType == 'rental':
-        properties.append("More listings : https://www.compass.com/for-rent/")
-    else:
-        properties.append("More listings : https://www.compass.com/homes-for-sale/")
+    default_footer(request, properties)
 
     #return quart.Response(response=html, status=200, content_type="text/html")
     return quart.Response(response=json.dumps(properties), status=200)
-
-
-def get_html(properties):
-    html = "<!DOCTYPE html><html><head><title>Real Estate Listings - Powered by Compass</title><style>.listing {border: 1px solid #ddd;padding: 10px;margin-bottom: 10px;}.listing img {max-width: 165px;max-height: 165px;}</style></head>"
-    html = html + "<body>"
-    for l in properties:
-        landing_url = l["Landing URL"]
-        elem = "<div class=\"listing\">"
-        elem = elem + "<p><h2><a href=\"{url}\">{addr}</a></h2></p>".format(url=landing_url, addr=l.get("info").get("address"))
-        elem = elem + "<p>Type: " + l.get("info").get("type") + "</p>"
-        elem = elem + "<p>Price: " + str(l.get("info").get("price")) + "</p>"
-        elem = elem + "<p>Bedrooms: " + str(l.get("info").get("bedrooms")) + "</p>"
-        elem = elem + "<p>Bathrooms: " + str(l.get("info").get("bathrooms")) + "</p>"
-        elem = elem + "<p>Square Feet: " + str(l.get("info").get("square feet")) + "</p>"
-        elem = elem + "<a href=\"{}\">View Listing</a>".format(l.get("thumbnail"))
-        elem = elem + "</div>"
-        html = html + elem
-    html = html + "</body></html>"
-    return html
 
 @app.post("/todos/<string:username>")
 async def add_todo(username):
@@ -204,6 +232,12 @@ async def openapi_spec():
 def get_auth_header():
     return {"Authorization": "Bearer {}".format(COMPASS_API_KEY)}
 
+def default_footer(request, properties):
+    listingType = request.get("listingType")
+    if listingType is not None and listingType == 'rental':
+        properties.append("More listings : https://www.compass.com/for-rent/")
+    else:
+        properties.append("More listings : https://www.compass.com/homes-for-sale/")
 
 def get_location_id_from_name(locations):
     ids = []
@@ -224,6 +258,23 @@ def get_location_id_from_name(locations):
     return ids
 
 
+def get_html(properties):
+    html = "<!DOCTYPE html><html><head><title>Real Estate Listings - Powered by Compass</title><style>.listing {border: 1px solid #ddd;padding: 10px;margin-bottom: 10px;}.listing img {max-width: 165px;max-height: 165px;}</style></head>"
+    html = html + "<body>"
+    for l in properties:
+        landing_url = l["Landing URL"]
+        elem = "<div class=\"listing\">"
+        elem = elem + "<p><h2><a href=\"{url}\">{addr}</a></h2></p>".format(url=landing_url, addr=l.get("info").get("address"))
+        elem = elem + "<p>Type: " + l.get("info").get("type") + "</p>"
+        elem = elem + "<p>Price: " + str(l.get("info").get("price")) + "</p>"
+        elem = elem + "<p>Bedrooms: " + str(l.get("info").get("bedrooms")) + "</p>"
+        elem = elem + "<p>Bathrooms: " + str(l.get("info").get("bathrooms")) + "</p>"
+        elem = elem + "<p>Square Feet: " + str(l.get("info").get("square feet")) + "</p>"
+        elem = elem + "<a href=\"{}\">View Listing</a>".format(l.get("thumbnail"))
+        elem = elem + "</div>"
+        html = html + elem
+    html = html + "</body></html>"
+    return html
 
 
 def main():
