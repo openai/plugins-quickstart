@@ -148,7 +148,7 @@ def get_html(properties):
     for l in properties:
         landing_url = l["Landing URL"]
         elem = "<div class=\"listing\">"
-        elem = elem + "<p><h2><a href=\"{url}\">{addr}</a></h2></p>".format(url=landing_url, addr=l.get("address"))
+        elem = elem + "<p><h2><a href=\"{url}\">{addr}</a></h2></p>".format(url=landing_url, addr=l.get("info").get("address"))
         elem = elem + "<p>Type: " + l.get("info").get("type") + "</p>"
         elem = elem + "<p>Price: " + str(l.get("info").get("price")) + "</p>"
         elem = elem + "<p>Bedrooms: " + str(l.get("info").get("bedrooms")) + "</p>"
