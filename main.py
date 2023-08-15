@@ -20,13 +20,7 @@ async def query(username):
     request = await quart.request.get_json(force=True)
     print("Request from ChatGpt is {}".format(request))
     # Default payload
-    payload = {"agentSearch": True,"listingTypes": [2], "saleStatuses": [9, 12]}
-
-    if request.get("minPrice") is not None:
-       payload["minPrice"]=request.get("minPrice")
-
-    if request.get("maxPrice") is not None:
-       payload["maxPrice"]=request.get("maxPrice")
+    payload = {"agentSearch": True}
 
     if request.get("minBedrooms") is not None:
        payload["minBedrooms"]=request.get("minBedrooms")
@@ -57,9 +51,21 @@ async def query(username):
         if len(location_ids) > 0:
             payload["locationIds"] = location_ids
 
-    if request.get("listingType") is not None:
-       if request.get("listingType") == 'rental': # default is sale
-           payload["listingTypes"] = [0, 3]
+    if request.get("listingType") is not None and request.get("listingType") == 'rental':
+        payload["listingTypes"] = [0, 3]
+        payload["rentalStatuses"]: [5, 7]
+        if request.get("minPrice") is not None:
+            payload["minRent"]=request.get("minPrice")
+        if request.get("maxPrice") is not None:
+            payload["maxRent"]=request.get("maxPrice")
+    else:
+        payload["listingTypes"] = [2]
+        payload["saleStatuses"]: [9, 12]
+        if request.get("minPrice") is not None:
+            payload["minPrice"]=request.get("minPrice")
+        if request.get("maxPrice") is not None:
+            payload["maxPrice"]=request.get("maxPrice")
+
 
     if request.get("num") is not None:
        payload["num"]=request.get("num")
