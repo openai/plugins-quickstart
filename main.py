@@ -192,6 +192,7 @@ def get_location_id_from_name(locations):
                     for place in cat.get("items"):
                         if place.get("id") is not None:
                             ids.append(place.get("id"))
+    print(ids)
     return ids
 
 
