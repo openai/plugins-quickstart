@@ -137,13 +137,8 @@ components:
           description: The number of results required by the user. For example, if query contains give me 10 properties which are more than 20 million dollars then num will be 10.
           required: false
     QueryResponse:
-      type: object
-      properties:
-        properties:
-          type: array
-          items:
-            type: string
-          description: The list of properties urls.
+      type: string
+      description: html string containing real estate listings
     getTodosResponse:
       type: object
       properties:
