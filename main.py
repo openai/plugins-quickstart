@@ -96,6 +96,9 @@ async def query(username):
     for l in response.json()["listings"]:
         landing_url = COMPASS_URL + l["canonicalPageLink"]
         print(landing_url)
+
+        address = l.get("location").get("prettyAddress")
+
         listingType = "unknown"
         if l.get("detailedInfo") is not None and l["detailedInfo"].get("propertyType") is not None and l["detailedInfo"]["propertyType"].get("masterType") is not None and l["detailedInfo"]["propertyType"]["masterType"].get("GLOBAL") is not None:
             listingType = l["detailedInfo"]["propertyType"]["masterType"]["GLOBAL"]
@@ -120,8 +123,10 @@ async def query(username):
         if l.get("media") is not None and l["media"][0] is not None and l["media"][0].get("thumbnailUrl") is not None:
             imageUrl = l["media"][0]["thumbnailUrl"]
         
-        listing = {"Landing URL": landing_url, "info": {"type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": totalBathrooms, "square feet": sqft}, "thumbnail": imageUrl}
+        listing = {"Landing URL": landing_url, "info": {"type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": totalBathrooms, "square feet": sqft, "address": address}, "thumbnail": imageUrl}
         properties.append(listing)
+
+    html = get_html(properties)
 
     listingType = request.get("listingType")
     if listingType is not None and listingType == 'rental':
@@ -129,8 +134,26 @@ async def query(username):
     else:
         properties.append("More listings : https://www.compass.com/homes-for-sale/")
 
-    return quart.Response(response=json.dumps(properties), status=200)
+    return quart.Response(response=html, status=200, content_type="text/html")
 
+
+def get_html(properties):
+    html = "<!DOCTYPE html><html><head><title>Real Estate Listings - Powered by Compass</title><style>.listing {border: 1px solid #ddd;padding: 10px;margin-bottom: 10px;}.listing img {max-width: 165px;max-height: 165px;}</style></head>"
+    html = html + "<body>"
+    for l in properties:
+        landing_url = l["Landing URL"]
+        elem = "<div class=\"listing\">"
+        elem = elem + "<h2><a href=\"{}\">{}</a></h2>".format(landing_url, l.get("address"))
+        elem = elem + "<p>Type: " + l.get("info").get("type") + "</p>"
+        elem = elem + "<p>Price: " + l.get("info").get("price") + "</p>"
+        elem = elem + "<p>Bedrooms: " + l.get("info").get("bedrooms") + "</p>"
+        elem = elem + "<p>Bathrooms: " + l.get("info").get("bathrooms") + "</p>"
+        elem = elem + "<p>Square Feet: " + l.get("info").get("square feet") + "</p>"
+        elem = elem + "<a href=\"{}\">View Listing</a>".format(l.get("thumbnail"))
+        elem = elem + "</div>"
+        html = html + elem
+    html = html + "</body></html>"
+    return html
 
 @app.post("/todos/<string:username>")
 async def add_todo(username):
