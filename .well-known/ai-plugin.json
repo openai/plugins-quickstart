@@ -1,18 +1,18 @@
 {
     "schema_version": "v1",
-    "name_for_human": "TODO List (no auth)",
-    "name_for_model": "todo",
-    "description_for_human": "Manage your TODO list. You can add, remove and view your TODOs.",
-    "description_for_model": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
+    "name_for_human": "Compass",
+    "name_for_model": "real_estate_search",
+    "description_for_human": "Real time information about real estate sale and rental properties.",
+    "description_for_model": "Use this plugin to search for real estate properties for sale and rentals. Do not use this tool if user did not ask about anything related to properties.",
     "auth": {
       "type": "none"
     },
     "api": {
       "type": "openapi",
-      "url": "http://localhost:5003/openapi.yaml"
+      "url": "https://plankton-app-pmrpv.ondigitalocean.app/openapi.yaml"
     },
-    "logo_url": "http://localhost:5003/logo.png",
-    "contact_email": "legal@example.com",
-    "legal_info_url": "http://example.com/legal"
+    "logo_url": "https://plankton-app-pmrpv.ondigitalocean.app/logo.png",
+    "contact_email": "press@compass.com",
+    "legal_info_url": "http://compass.com/legal"
   }
   
