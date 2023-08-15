@@ -146,10 +146,10 @@ def get_html(properties):
         elem = "<div class=\"listing\">"
         elem = elem + "<h2><a href=\"{}\">{}</a></h2>".format(landing_url, l.get("address"))
         elem = elem + "<p>Type: " + l.get("info").get("type") + "</p>"
-        elem = elem + "<p>Price: " + l.get("info").get("price") + "</p>"
-        elem = elem + "<p>Bedrooms: " + l.get("info").get("bedrooms") + "</p>"
-        elem = elem + "<p>Bathrooms: " + l.get("info").get("bathrooms") + "</p>"
-        elem = elem + "<p>Square Feet: " + l.get("info").get("square feet") + "</p>"
+        elem = elem + "<p>Price: " + str(l.get("info").get("price")) + "</p>"
+        elem = elem + "<p>Bedrooms: " + str(l.get("info").get("bedrooms")) + "</p>"
+        elem = elem + "<p>Bathrooms: " + str(l.get("info").get("bathrooms")) + "</p>"
+        elem = elem + "<p>Square Feet: " + str(l.get("info").get("square feet")) + "</p>"
         elem = elem + "<a href=\"{}\">View Listing</a>".format(l.get("thumbnail"))
         elem = elem + "</div>"
         html = html + elem
