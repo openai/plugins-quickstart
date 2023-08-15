@@ -26,10 +26,7 @@ paths:
       responses:
         "200":
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/QueryResponse'
+          content: text/html
   /todos/{username}:
     get:
       operationId: getTodos
