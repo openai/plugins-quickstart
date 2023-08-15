@@ -78,10 +78,11 @@ async def query(username):
                 location_ids.append(gis.locations.get(key))
             else:
                 nbhs.append(location.lower())
+        if len(nbhs) > 0:
+            nbhs_ids = get_location_id_from_name(nbhs)
+            location_ids.extend(nbhs_ids)
         if len(location_ids) > 0:
             payload["locationIds"] = location_ids
-        else:
-            payload["neighborhoods"] = nbhs
 
     properties=["https://www.compass.com/app/listing/217-west-57th-street-unit-107-manhattan-ny-10019/1262365637693399233",
                 "https://www.compass.com/app/listing/217-west-57th-street-unit-ph-manhattan-ny-10019/1200211444829995265",
@@ -174,6 +175,27 @@ async def openapi_spec():
 
 def get_auth_header():
     return {"Authorization": "Bearer {}".format(COMPASS_API_KEY)}
+
+
+def get_location_id_from_name(locations):
+    ids = []
+    for location in locations:
+        payload = {"q": location, "sources":[2,5,3],"preferredUcGeoIdForRanking":"nyc","tokens":[],"rankerVersion":"v5.0","urlStrategy":2,"enablePrivateSchools":False,"enableSchoolsWithoutBoundaries":False,"infoFields":[2]}
+        response = requests.post("https://compass.com/api/v3/omnisuggest/autocomplete", json=payload)
+        print(response)
+        resp_body = response.json();
+        print(resp_body)
+        categories = resp_body.get("categories")
+        if categories is not None and len(categories) > 0:
+            for cat in categories:
+                if cat.get("label") is not None and cat.get("label") == "Places" and cat.get("items") is not None:
+                    for place in cat.get("items"):
+                        if place.get("id") is not None:
+                            ids.append(place.get("id"))
+    return ids
+
+
+
 
 def main():
     app.run(debug=True, host="0.0.0.0", port=5003)
