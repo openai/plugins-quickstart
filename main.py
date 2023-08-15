@@ -126,9 +126,11 @@ async def query(username):
     if request.get("listingType") is not None:
        listingType = request.get("listingType")
        if listingType == 'rental':
-          properties.append("More listings : https://www.compass.com/for-rent/")
+           properties.append("<a href='https://www.compass.com/for-rent/'>More listings</a>")
+           #properties.append("More listings : https://www.compass.com/for-rent/")
        else:
-          properties.append("More listings : https://www.compass.com/homes-for-sale/")
+           # properties.append("More listings : https://www.compass.com/homes-for-sale/")
+           properties.append("<a href='https://www.compass.com/for-rent/'>More listings</a>")
 
     return quart.Response(response=json.dumps(properties), status=200)
 
