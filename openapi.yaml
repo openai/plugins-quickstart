@@ -23,10 +23,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/QueryRequest'
-      responses:
-        "200":
-          description: html containing real estate listings
-          content: html
+      output:
+        name: htmlContent
+        description: html containing real estate listings
+        content: html
   /todos/{username}:
     get:
       operationId: getTodos

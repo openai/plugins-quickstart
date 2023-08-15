@@ -130,7 +130,7 @@ async def query(username):
         listing = {"Landing URL": landing_url, "info": {"address": address, "type": listingType, "price": price, "bedrooms": bedroomsNumber, "bathrooms": totalBathrooms, "square feet": sqft}, "thumbnail": imageUrl}
         properties.append(listing)
 
-    html = get_html(properties)
+    html = {"htmlContent": get_html(properties)}
 
     listingType = request.get("listingType")
     if listingType is not None and listingType == 'rental':
@@ -147,7 +147,7 @@ def get_html(properties):
     for l in properties:
         landing_url = l["Landing URL"]
         elem = "<div class=\"listing\">"
-        elem = elem + "<h2><a href=\"{}\">{}</a></h2>".format(landing_url, l.get("address"))
+        elem = elem + "<p><h2><a href=\"{url}\">{addr}</a></h2></p>".format(url=landing_url, addr=l.get("address"))
         elem = elem + "<p>Type: " + l.get("info").get("type") + "</p>"
         elem = elem + "<p>Price: " + str(l.get("info").get("price")) + "</p>"
         elem = elem + "<p>Bedrooms: " + str(l.get("info").get("bedrooms")) + "</p>"
