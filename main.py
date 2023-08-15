@@ -139,7 +139,8 @@ async def query(username):
     else:
         properties.append("More listings : https://www.compass.com/homes-for-sale/")
 
-    return quart.Response(response=html, status=200, content_type="text/html")
+    #return quart.Response(response=html, status=200, content_type="text/html")
+    return quart.Response(response=json.dumps(properties), status=200)
 
 
 def get_html(properties):

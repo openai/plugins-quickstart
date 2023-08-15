@@ -11,33 +11,36 @@ paths:
       operationId: query
       summary: Get the list of listings
       parameters:
-      - in: path
-        name: username
-        schema:
+        - in: path
+          name: username
+          schema:
             type: string
-        required: true
-        description: The name of the user.
+          required: true
+          description: The name of the user.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/QueryRequest'
-      output:
-        name: htmlContent
-        description: html containing real estate listings
-        type: html
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
   /todos/{username}:
     get:
       operationId: getTodos
       summary: Get the list of todos
       parameters:
-      - in: path
-        name: username
-        schema:
+        - in: path
+          name: username
+          schema:
             type: string
-        required: true
-        description: The name of the user.
+          required: true
+          description: The name of the user.
       responses:
         "200":
           description: OK
@@ -49,12 +52,12 @@ paths:
       operationId: addTodo
       summary: Add a todo to the list
       parameters:
-      - in: path
-        name: username
-        schema:
+        - in: path
+          name: username
+          schema:
             type: string
-        required: true
-        description: The name of the user.
+          required: true
+          description: The name of the user.
       requestBody:
         required: true
         content:
@@ -68,12 +71,12 @@ paths:
       operationId: deleteTodo
       summary: Delete a todo from the list
       parameters:
-      - in: path
-        name: username
-        schema:
+        - in: path
+          name: username
+          schema:
             type: string
-        required: true
-        description: The name of the user.
+          required: true
+          description: The name of the user.
       requestBody:
         required: true
         content:
@@ -89,7 +92,7 @@ components:
     QueryRequest:
       type: object
       required:
-      - todo
+        - todo
       properties:
         userQuery:
           type: string
@@ -134,8 +137,13 @@ components:
           description: The number of results required by the user. For example, if query contains give me 10 properties which are more than 20 million dollars then num will be 10.
           required: false
     QueryResponse:
-      type: string
-      description: html string containing real estate listings
+      type: object
+      properties:
+        properties:
+          type: array
+          items:
+            type: string
+          description: The list of properties urls.
     getTodosResponse:
       type: object
       properties:
@@ -147,7 +155,7 @@ components:
     addTodoRequest:
       type: object
       required:
-      - todo
+        - todo
       properties:
         todo:
           type: string
@@ -156,7 +164,7 @@ components:
     deleteTodoRequest:
       type: object
       required:
-      - todo_idx
+        - todo_idx
       properties:
         todo_idx:
           type: integer
