@@ -26,7 +26,7 @@ paths:
       output:
         name: htmlContent
         description: html containing real estate listings
-        content: html
+        type: html
   /todos/{username}:
     get:
       operationId: getTodos
