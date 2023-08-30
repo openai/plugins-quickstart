@@ -28,6 +28,13 @@ The plugin should now be installed and enabled! You can start with a question li
 
 ## Setup remotely
 
+### GitPod
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/github.com/openai/plugins-quickstart)
+
+When using Gitpod, it will run `pip install -r requirements.txt` and `python main.py` for you so you do not need to complete those steps. 
+
+Instead, you will need to update `/.well-known/ai-plugin.json` and `openapi.yaml` to replace `http://localhost:5003/` with the URL for your workspace. This can be found by clicking on `Ports` in the bottom panel and copying the value shown in the `Address` column. Once you have made those 3 replacements (2 in `ai-plugin.json` and 1 in `openapi.yaml`) the above instructions can be used to install the development plugin (using the GitPod address instead of `localhost:5003`)
+
 ### Cloudflare workers
 
 ### Code Sandbox
