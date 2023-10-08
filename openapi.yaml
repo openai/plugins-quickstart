@@ -1,93 +1,64 @@
 openapi: 3.0.1
 info:
-  title: TODO Plugin
-  description: A plugin that allows the user to create and manage a TODO list using ChatGPT. If you do not know the user's username, ask them first before making queries to the plugin. Otherwise, use the username "global".
-  version: 'v1'
+  title: Weather Forecast
+  description: A Plugin that allows the user to forecast current or future weather using ChatGPT. Ask for clarification if a user request is ambiguous.
+  version: "v1"
 servers:
   - url: http://localhost:5003
 paths:
-  /todos/{username}:
+  /weather/current:
     get:
-      operationId: getTodos
-      summary: Get the list of todos
+      operationId: getCurrentWeather
+      summary: Get the current weather of the city
       parameters:
-      - in: path
-        name: username
-        schema:
+        - in: query
+          name: city
+          schema:
             type: string
-        required: true
-        description: The name of the user.
+          required: true
+          description: The city and country, e.g. Beijing, China.
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getTodosResponse'
-    post:
-      operationId: addTodo
-      summary: Add a todo to the list
+                $ref: "#/components/schemas/getCurrentWeather"
+  /weather/forecast:
+    get:
+      operationId: getNDayWeatherForecast
+      summary: Forecast the weather of the city in a few days
       parameters:
-      - in: path
-        name: username
-        schema:
+        - in: query
+          name: num_days
+          schema:
+            type: integer
+          required: true
+          description: The number of days to forecast, e.g. 5
+        - in: query
+          name: city
+          schema:
             type: string
-        required: true
-        description: The name of the user.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/addTodoRequest'
+          required: true
+          description: The city and country, e.g. Beijing, China.
       responses:
         "200":
           description: OK
-    delete:
-      operationId: deleteTodo
-      summary: Delete a todo from the list
-      parameters:
-      - in: path
-        name: username
-        schema:
-            type: string
-        required: true
-        description: The name of the user.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/deleteTodoRequest'
-      responses:
-        "200":
-          description: OK
-
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getNDayWeatherForecast"
 components:
   schemas:
-    getTodosResponse:
+    getCurrentWeather:
       type: object
       properties:
-        todos:
-          type: array
-          items:
-            type: string
-          description: The list of todos.
-    addTodoRequest:
-      type: object
-      required:
-      - todo
-      properties:
-        todo:
+        weather:
           type: string
-          description: The todo to add to the list.
-          required: true
-    deleteTodoRequest:
+          description: The current weather of the city.
+    getNDayWeatherForecast:
       type: object
-      required:
-      - todo_idx
       properties:
-        todo_idx:
-          type: integer
-          description: The index of the todo to delete.
-          required: true
+        weather:
+          type: string
+          description: The weather of the city in a few days.

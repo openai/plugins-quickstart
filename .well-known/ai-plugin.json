@@ -1,18 +1,17 @@
 {
-    "schema_version": "v1",
-    "name_for_human": "TODO List (no auth)",
-    "name_for_model": "todo",
-    "description_for_human": "Manage your TODO list. You can add, remove and view your TODOs.",
-    "description_for_model": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
-    "auth": {
-      "type": "none"
-    },
-    "api": {
-      "type": "openapi",
-      "url": "http://localhost:5003/openapi.yaml"
-    },
-    "logo_url": "http://localhost:5003/logo.png",
-    "contact_email": "legal@example.com",
-    "legal_info_url": "http://example.com/legal"
-  }
-  
+  "schema_version": "v1",
+  "name_for_human": "Weather Forecast",
+  "name_for_model": "weather",
+  "description_for_human": "China Weather Forecast. You can ask the current or future weather of anty city in China.",
+  "description_for_model": "Plugin for managing weather forecasts. Search current weather and future forecasts through provided api.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "http://localhost:5003/openapi.yaml"
+  },
+  "logo_url": "http://localhost:5003/logo.png",
+  "contact_email": "helx.levon@gmail.com",
+  "legal_info_url": "http://example.com/legal"
+}
