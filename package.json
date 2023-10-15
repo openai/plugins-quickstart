@@ -1,0 +1,23 @@
+{
+  "name": "medium-gpt",
+  "version": "1.0.0",
+  "description": "Get a todo list ChatGPT plugin up and running in under 5 minutes using Python. This plugin is designed to work in conjunction with the [ChatGPT plugins documentation](https://platform.openai.com/docs/plugins). If you do not already have plugin developer access, please [join the waitlist](https://openai.com/waitlist/plugins).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MakeItAwesome/medium-gpt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MakeItAwesome/medium-gpt/issues"
+  },
+  "homepage": "https://github.com/MakeItAwesome/medium-gpt#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
