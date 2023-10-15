@@ -1,93 +1,147 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
-  title: TODO Plugin
-  description: A plugin that allows the user to create and manage a TODO list using ChatGPT. If you do not know the user's username, ask them first before making queries to the plugin. Otherwise, use the username "global".
-  version: 'v1'
+  title: Medium API
+  version: "1.0"
 servers:
-  - url: http://localhost:5003
+  - url: https://api.medium.com/v1
 paths:
-  /todos/{username}:
-    get:
-      operationId: getTodos
-      summary: Get the list of todos
+  /users/{authorId}/posts:
+    post:
+      summary: Creates a post on the authenticated user’s profile.
       parameters:
-      - in: path
-        name: username
-        schema:
+        - name: authorId
+          in: path
+          required: true
+          description: The user id of the authenticated user.
+          schema:
             type: string
+      requestBody:
         required: true
-        description: The name of the user.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the post.
+                  maxLength: 100
+                contentFormat:
+                  type: string
+                  enum: [html, markdown]
+                  description: The format of the "content" field.
+                content:
+                  type: string
+                  description: The body of the post, in a valid, semantic, HTML fragment, or Markdown.
+                tags:
+                  type: array
+                  items:
+                    type: string
+                    maxLength: 25
+                canonicalUrl:
+                  type: string
+                publishStatus:
+                  type: string
+                  enum: [public, draft, unlisted]
+                license:
+                  type: string
+                  enum: [all-rights-reserved, cc-40-by, cc-40-by-sa, cc-40-by-nd, cc-40-by-nc, cc-40-by-nc-nd, cc-40-by-nc-sa, cc-40-zero, public-domain]
+                notifyFollowers:
+                  type: boolean
       responses:
-        "200":
-          description: OK
+        '201':
+          description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getTodosResponse'
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      title:
+                        type: string
+                      authorId:
+                        type: string
+                      tags:
+                        type: array
+                        items:
+                          type: string
+                      url:
+                        type: string
+                      canonicalUrl:
+                        type: string
+                      publishStatus:
+                        type: string
+                      publishedAt:
+                        type: integer
+                        format: int64
+                      license:
+                        type: string
+                      licenseUrl:
+                        type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /publications/{publicationId}/posts:
     post:
-      operationId: addTodo
-      summary: Add a todo to the list
+      summary: Creates a post under a publication.
       parameters:
-      - in: path
-        name: username
-        schema:
+        - name: publicationId
+          in: path
+          required: true
+          description: The id of the publication the post is being created under.
+          schema:
             type: string
-        required: true
-        description: The name of the user.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/addTodoRequest'
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the post.
+                  maxLength: 100
+                contentFormat:
+                  type: string
+                  enum: [html, markdown]
+                content:
+                  type: string
+                  description: The body of the post, in a valid, semantic, HTML fragment, or Markdown.
+                tags:
+                  type: array
+                  items:
+                    type: string
+                    maxLength: 25
+                publishStatus:
+                  type: string
+                  enum: [public, draft, unlisted]
       responses:
-        "200":
-          description: OK
-    delete:
-      operationId: deleteTodo
-      summary: Delete a todo from the list
-      parameters:
-      - in: path
-        name: username
-        schema:
-            type: string
-        required: true
-        description: The name of the user.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/deleteTodoRequest'
-      responses:
-        "200":
-          description: OK
-
-components:
-  schemas:
-    getTodosResponse:
-      type: object
-      properties:
-        todos:
-          type: array
-          items:
-            type: string
-          description: The list of todos.
-    addTodoRequest:
-      type: object
-      required:
-      - todo
-      properties:
-        todo:
-          type: string
-          description: The todo to add to the list.
-          required: true
-    deleteTodoRequest:
-      type: object
-      required:
-      - todo_idx
-      properties:
-        todo_idx:
-          type: integer
-          description: The index of the todo to delete.
-          required: true
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      publicationId:
+                        type: string
+                      # ... other fields similar to the first endpoint ...
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
