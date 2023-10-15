@@ -1,18 +1,24 @@
 {
     "schema_version": "v1",
-    "name_for_human": "TODO List (no auth)",
-    "name_for_model": "todo",
-    "description_for_human": "Manage your TODO list. You can add, remove and view your TODOs.",
-    "description_for_model": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
+    "name_for_human": "MediumGPT",
+    "name_for_model": "MediumGPT",
+    "description_for_human": "Publish medium articles that you write with ChatGPT's help.",
+    "description_for_model": "Publish medium articles that you write with ChatGPT's help.",
     "auth": {
-      "type": "none"
+      "type": "oauth",
+      "client_url": "https://medium.com/m/oauth/authorize",
+      "scope": "basicProfile,publishPost",
+      "authorization_url": "https://api.medium.com/v1/tokens",
+      "authorization_content_type": "application/json",
+      "verification_tokens": {
+        "openai": "Replace_this_string_with_the_verification_token_generated_in_the_ChatGPT_UI"
+      }
     },
     "api": {
-      "type": "openapi",
-      "url": "http://localhost:5003/openapi.yaml"
+        "type": "openapi",
+        "url": "https://github.com/MakeItAwesome/medium-gpt/blob/main/openapi.yaml"
     },
-    "logo_url": "http://localhost:5003/logo.png",
-    "contact_email": "legal@example.com",
-    "legal_info_url": "http://example.com/legal"
-  }
-  
+    "logo_url": "https://github.com/MakeItAwesome/medium-gpt/blob/main/logo.png",
+    "contact_email": "mediumgptplugin@gmail.com",
+    "legal_info_url": "https://github.com/MakeItAwesome/medium-gpt/blob/main/LICENSE"
+}
