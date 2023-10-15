@@ -1,0 +1,17 @@
+{
+    "schema_version": "v1",
+    "name_for_human": "MediumGPT",
+    "name_for_model": "MediumGPT",
+    "description_for_human": "Publish medium articles that you write with ChatGPT's help.",
+    "description_for_model": "Publish medium articles that you write with ChatGPT's help.",
+    "auth": {
+        "type": "none"
+    },
+    "api": {
+        "type": "openapi",
+        "url": "https://github.com/MakeItAwesome/medium-gpt/blob/main/openapi.yaml"
+    },
+    "logo_url": "https://github.com/MakeItAwesome/medium-gpt/blob/main/logo.png",
+    "contact_email": "mediumgptplugin@gmail.com",
+    "legal_info_url": "https://github.com/MakeItAwesome/medium-gpt/blob/main/LICENSE"
+}
