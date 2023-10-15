@@ -11,7 +11,7 @@
       "authorization_url": "https://api.medium.com/v1/tokens",
       "authorization_content_type": "application/json",
       "verification_tokens": {
-        "openai": "Replace_this_string_with_the_verification_token_generated_in_the_ChatGPT_UI"
+        "openai":"575e0958cf21407cba9922bf78a3e310"
       }
     },
     "api": {
