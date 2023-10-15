@@ -16,7 +16,7 @@
     },
     "api": {
         "type": "openapi",
-        "url": "https://github.com/MakeItAwesome/medium-gpt/blob/main/openapi.yaml"
+        "url": "https://89a861458fe2.ngrok.app/openapi.yaml"
     },
     "logo_url": "https://github.com/MakeItAwesome/medium-gpt/blob/main/logo.png",
     "contact_email": "mediumgptplugin@gmail.com",
