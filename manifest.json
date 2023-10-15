@@ -5,7 +5,14 @@
     "description_for_human": "Publish medium articles that you write with ChatGPT's help.",
     "description_for_model": "Publish medium articles that you write with ChatGPT's help.",
     "auth": {
-        "type": "none"
+      "type": "oauth",
+      "client_url": "https://medium.com/m/oauth/authorize",
+      "scope": "basicProfile,publishPost",
+      "authorization_url": "https://api.medium.com/v1/tokens",
+      "authorization_content_type": "application/json",
+      "verification_tokens": {
+        "openai": "Replace_this_string_with_the_verification_token_generated_in_the_ChatGPT_UI"
+      }
     },
     "api": {
         "type": "openapi",
