@@ -1,12 +1,44 @@
 const express = require("express");
 const app = express();
 const port = 3000;
-
+const axios = require("axios");
 const fs = require("fs").promises;
 const path = require("path");
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");
+});
+
+// Passthrough route for creating a post on the authenticated user's profile
+app.post("/users/:authorId/posts", async (req, res) => {
+  const { authorId } = req.params;
+  const payload = req.body;
+
+  try {
+    const response = await axios.post(
+      `https://api.medium.com/v1/users/${authorId}/posts`,
+      payload
+    );
+    res.status(201).json(response.data);
+  } catch (error) {
+    res.status(error.response?.status || 500).json(error.response?.data || {});
+  }
+});
+
+// Passthrough route for creating a post under a publication
+app.post("/publications/:publicationId/posts", async (req, res) => {
+  const { publicationId } = req.params;
+  const payload = req.body;
+
+  try {
+    const response = await axios.post(
+      `https://api.medium.com/v1/publications/${publicationId}/posts`,
+      payload
+    );
+    res.status(201).json(response.data);
+  } catch (error) {
+    res.status(error.response?.status || 500).json(error.response?.data || {});
+  }
 });
 
 app.get("/logo.png", async (req, res) => {
