@@ -7,6 +7,7 @@ servers:
 paths:
   /users/{authorId}/posts:
     post:
+      operationId: createUserPost
       summary: Creates a post on the authenticated user’s profile.
       parameters:
         - name: authorId
@@ -90,6 +91,7 @@ paths:
           description: Forbidden
   /publications/{publicationId}/posts:
     post:
+      operationId: createPublicationPost
       summary: Creates a post under a publication.
       parameters:
         - name: publicationId
