@@ -9,9 +9,9 @@
     },
     "api": {
       "type": "openapi",
-      "url": "http://localhost:5003/openapi.yaml"
+      "url": "https://psychic-system-q74qxp6vgjf96qv-5003.app.github.dev/openapi.yaml"
     },
-    "logo_url": "http://localhost:5003/logo.png",
+    "logo_url": "https://psychic-system-q74qxp6vgjf96qv-5003.app.github.dev/logo.png",
     "contact_email": "legal@example.com",
     "legal_info_url": "http://example.com/legal"
   }
