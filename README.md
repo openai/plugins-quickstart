@@ -28,6 +28,25 @@ The plugin should now be installed and enabled! You can start with a question li
 
 ## Setup remotely
 
+### GitHub Codespaces
+1. Create a new Codespace from this repo by clicking Code -> Codespaces and the + button.
+2. All required packages are automatically installed.
+3. To run the plugin, enter the following command:
+
+```bash
+python main.py
+```
+Once the Codespaces server is running:
+
+1. Copy the URI to the local server (found under Ports)
+2. Navigate to https://chat.openai.com. 
+3. In the Model drop down, select "Plugins" (note, if you don't see it there, you don't have access yet).
+4. Select "Plugin store"
+5. Select "Develop your own plugin"
+6. Paste in the local server Codespaces url, then select "Find manifest file".
+
+The plugin should now be installed and enabled! You can start with a question like "What is on my todo list" and then try adding something to it as well! 
+
 ### Cloudflare workers
 
 ### Code Sandbox

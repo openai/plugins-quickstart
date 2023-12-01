@@ -1,10 +1,18 @@
 import json
-
+import os
 import quart
 import quart_cors
 from quart import request
 
 app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
+
+# Get GitHub Codespaces domain if any
+def construct_codespaces_url():
+    codespace_name = os.environ.get('CODESPACE_NAME')
+    if not codespace_name:
+        return None  # Return None if there's no codespace name
+    port = 5003  # Example port number
+    return f"https://{codespace_name}-{port}.app.github.dev"
 
 # Keep track of todo's. Does not persist if Python session is restarted.
 _TODOS = {}
@@ -37,17 +45,32 @@ async def plugin_logo():
 
 @app.get("/.well-known/ai-plugin.json")
 async def plugin_manifest():
-    host = request.headers['Host']
-    with open("./.well-known/ai-plugin.json") as f:
-        text = f.read()
-        return quart.Response(text, mimetype="text/json")
+    codespaces_url = construct_codespaces_url()
+    with open("./.well-known/ai-plugin.json", "r") as f:
+        data = json.load(f)
+    
+    # Update URL properties only if codespaces_url is not None
+    if codespaces_url:
+        data["api"]["url"] = data["api"]["url"].replace("localhost:5003", codespaces_url)
+        data["logo_url"] = data["logo_url"].replace("localhost:5003", codespaces_url)
+
+    return quart.Response(json.dumps(data), mimetype="application/json")
 
 @app.get("/openapi.yaml")
 async def openapi_spec():
-    host = request.headers['Host']
-    with open("openapi.yaml") as f:
+    codespaces_url = construct_codespaces_url()
+    with open("openapi.yaml", "r") as f:
         text = f.read()
-        return quart.Response(text, mimetype="text/yaml")
+    
+    # Replace the URL only if codespaces_url is not None
+    if codespaces_url:
+        updated_text = text.replace("localhost:5003", codespaces_url)
+    else:
+        updated_text = text
+
+    return quart.Response(updated_text, mimetype="text/yaml")
+
+
 
 def main():
     app.run(debug=True, host="localhost", port=5003)
