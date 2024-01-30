@@ -1,6 +1,6 @@
 # ChatGPT plugins quickstart
 
-Get a todo list ChatGPT plugin up and running in under 5 minutes using Python. This plugin is designed to work in conjunction with the [ChatGPT plugins documentation](https://platform.openai.com/docs/plugins). If you do not already have plugin developer access, please [join the waitlist](https://openai.com/waitlist/plugins).
+Get a TODO list ChatGPT plugin up and running in under 5 minutes using Python. This plugin is designed to work in conjunction with the [ChatGPT plugins documentation](https://platform.openai.com/docs/plugins). Plugins have been superseded by GPTs, learn more about [creating a GPT with actions](https://platform.openai.com/docs/actions/introduction).
 
 ## Setup locally
 
@@ -25,14 +25,6 @@ Once the local server is running:
 5. Enter in `localhost:5003` since this is the URL the server is running on locally, then select "Find manifest file".
 
 The plugin should now be installed and enabled! You can start with a question like "What is on my todo list" and then try adding something to it as well! 
-
-## Setup remotely
-
-### Cloudflare workers
-
-### Code Sandbox
-
-### Replit
 
 ## Getting help
 
