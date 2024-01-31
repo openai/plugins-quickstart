@@ -26,6 +26,10 @@ Once the local server is running:
 
 The plugin should now be installed and enabled! You can start with a question like "What is on my todo list" and then try adding something to it as well! 
 
+## Deploy
+
+[![Run on Replit](https://replit.com/badge?caption=Run%20on%20Replit)](https://replit.com/@bardia/ChatGPT-Todo-Plugin)
+
 ## Getting help
 
 If you run into issues or have questions building a plugin, please join our [Developer community forum](https://community.openai.com/c/chat-plugins/20).
